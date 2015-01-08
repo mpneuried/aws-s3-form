@@ -2,27 +2,54 @@ aws-s3-form
 ============
 
 [![Build Status](https://secure.travis-ci.org/mpneuried/aws-s3-form.png?branch=master)](http://travis-ci.org/mpneuried/aws-s3-form)
-[![Build Status](https://david-dm.org/mpneuried/aws-s3-form.png)](https://david-dm.org/mpneuried/aws-s3-form)
+[![Dependencies](https://david-dm.org/mpneuried/aws-s3-form.png)](https://david-dm.org/mpneuried/aws-s3-form)
 [![NPM version](https://badge.fury.io/js/aws-s3-form.png)](http://badge.fury.io/js/aws-s3-form)
 
 Generate a signed and reday to use formdata to put files to s3 directly from teh browser. Signing is done by using AWS Signature Version 4 
 
-*Written in coffee-script*
-
-**INFO: all examples are written in coffee-script**
-
 ## Install
 
-```
+```sh
   npm install aws-s3-form
 ```
 
 ## Initialize
 
-```
-  // TODO init code
+```js
+  var AwsS3Form = require( "aws-s3-form" );
+
+  var formGen = new AwsS3Form({
+  	accessKeyId:		"your-access-key",
+  	secretAccessKey:	"your-secret",
+  	region:				"us-east-1",
+  	bucket:				"my-bucket-name",
+  	redirectUrlTemplate:"http://localhost:3010/redir/<%= filename %>"
+  });
 ```
 
+## Usage
+
+```js
+formdata = formGen.create( "my-s3-filename-or-key" )
+/*
+
+	{
+		action: "http://my-bucket-name.s3.amazonaws.com/",
+		filefield: "file",
+		fields: {
+			key: "my-s3-filename-or-key",
+			acl: "public-read",
+			success_action_redirect: "http://localhost:3010/redir/my-s3-filename-or-key",
+			"X-Amz-Credential": "your-access-key/20150108/us-east-1/s3/aws4_request",
+			"X-Amz-Algorithm": "AWS4-HMAC-SHA256",
+			"X-Amz-Date": "20150108T103146Z",
+			"Policy": "eyJleHBpcmF0aW9uIj ... generated base64 policy ... XdpdGgiLCI",
+			"X-Amz-Signature": "4732d1 ... generated signature ... 1ac65d171a"
+		}
+	}
+
+ */
+```
 **Options** 
 
 - **foo** : *( `String` required )* TODO option description

@@ -40,7 +40,7 @@ class AwsS3Form extends require( "mpbasic" )()
 			# **aws-s3-form.policyExpiration** *Date|Number* Add time in seconds to now to define the expiration of the policy. Or set a hard Date.
 			policyExpiration: 60*60*12 # Default 12 hrs
 			# **aws-s3-form.keyPrefix** *String* Key prefix to define a policy that the key has to start with this value
-			keyPrefix: "/"
+			keyPrefix: ""
 			# **aws-s3-form.acl** *String* Key prefix to define a policy that the key has to start with this value
 			acl: "public-read"
 			# **aws-s3-form.useUuid** *Boolean* Use a uuid for better security

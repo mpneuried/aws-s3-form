@@ -1,0 +1,45 @@
+{
+  "name": "aws-s3-form",
+  "version": "0.0.1",
+  "description": "Generate a signed and reday to use formdata to put files to s3 directly from teh browser. Signing is done by using AWS Signature Version 4 ",
+  "keywords": [],
+  "homepage": "https://github.com/mpneuried/aws-s3-form",
+  "bugs": "https://github.com/mpneuried/aws-s3-form/issues",
+  "author": {
+    "name": "mpneuried",
+    "email": "",
+    "url": "https://github.com/aws-s3-form"
+  },
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mpneuried/aws-s3-form.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mpbasic": "0.0.x",
+    "lodash": "2.4.x",
+    "node-uuid": "1.4.x"
+  },
+  "devDependencies": {
+    "request": "2.x",
+    "mime": "1.2.x",
+    "should": "4.3.x",
+    "grunt": "0.4.x",
+    "grunt-regarde": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-include-replace": "*",
+    "grunt-mocha-cli": "*",
+    "grunt-docker": "0.0.x",
+    "grunt-contrib-clean": "*",
+    "xml2js": "0.4.x",
+    "express": "4.10.x",
+    "jade": "1.8.x"
+  }
+}

@@ -1,0 +1,54 @@
+doctype html
+html
+	head
+		meta( charset="utf-8" )
+		meta( http-equiv="X-UA-Compatible" content="IE=edge" )
+		meta( name="viewport" content="width=device-width, initial-scale=1" )
+		title S3 Form Test
+		link( rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" )
+
+	body
+		.container
+			h1 S3 Form Test
+
+			hr
+
+			h3 Parameter
+			form( action="/" )
+				.row 
+					.col-sm-3
+						.form-group
+							label( for="key" ) Filename: 
+							input.form-control( id="key" name="key" value=q.key )
+					.col-sm-3
+						.form-group
+							label( for="acl" ) Acl: 
+							select.form-control( id="acl" name="acl" type="select" )
+								option( selected= q.acl == "public-read" ) public-read
+								option( selected= q.acl == "authenticated-read" ) authenticated-read 
+				.row
+					.col-sm-12
+						button.btn.btn-default( type="submit" ) Change
+
+			hr
+
+			h3 Example
+			.row-fluid
+				.col-sm-6( style="overflow:hidden" )
+					form( action=example.action target="s3target" enctype="multipart/form-data" method="POST" )
+						
+						h4 Generated Hidden Data
+						dl.dl-horizontal
+							each val, name in example.fields
+								input.form-control( id=name type="hidden" name=name value=val )
+								dt= name
+								dd= val
+
+						.form-group
+							label( for="file" ) File: 
+							input( type="file" id="file" name=example.filefield )
+
+						button.btn.btn-default( type="submit" ) Upload
+				.col-sm-6
+					h4	Result
+					iframe( name="s3target" width="100%", height="500" )

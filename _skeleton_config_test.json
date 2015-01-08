@@ -1,0 +1,14 @@
+{
+	"s3": {
+		"accessKeyId": " - Please define your test key - ",
+		"secretAccessKey": " - Please define your test secret - ",
+		"region": "eu-central-1",
+		"bucket": " - Please define your test bucket - "
+	},
+	"mocha":{
+		"file": " - Please define the path to your test file - "
+	},
+	"example": {
+		"port": 3010
+	}
+}

@@ -3,3 +3,4 @@
 Gruntfile.*
 /test
 /_testviews
+*.json

@@ -133,6 +133,39 @@ Create a AWS Signature Version 4. This is used to create the signature out of th
 
 You can see a working example express server [here](https://github.com/mpneuried/aws-s3-form/blob/master/_src/test/server.coffee) and the corresponding jade template [here](https://github.com/mpneuried/aws-s3-form/blob/master/_testviews/index.jade). 
 
+## Use Cases
+
+#### use origin filename as S3 key/filename
+
+It is a typical use case to reuse the original filename as s3 key.
+To handle this correctly this is the example to do it correctly.
+
+```js
+  var AwsS3Form = require( "aws-s3-form" );
+
+  var formGen = new AwsS3Form({
+  	accessKeyId:		"your-access-key",
+  	secretAccessKey:	"your-secret",
+  	region:				"us-east-1",
+  	bucket:				"my-bucket-name",
+  	redirectUrlTemplate:"http://localhost:3010/redir/*"
+  });
+  
+  var myForm = formGen.create( "${filename}" );
+  
+  / ... handle the data
+
+``` 
+
+The key points are, that you have to specify:
+
+- the redirect with `*` at the end
+- the filename with the placeholder `${filename}`
+
+*This is also implemented within the example server as special case*
+
+> Requested by [jontelm #1](https://github.com/mpneuried/aws-s3-form/issues/1)
+
 ## Todos
 
  * Mimetype guessing based on the given key/filename
@@ -154,7 +187,8 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.4|2015-1-9|Initial version.|
+|0.0.5|2015-1-26|Updated readme and optimized example server|
+|0.0.4|2015-1-09|Initial version.|
 
 [![NPM](https://nodei.co/npm-dl/aws-s3-form.png?months=6)](https://nodei.co/npm/aws-s3-form/)
 

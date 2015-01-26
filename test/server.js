@@ -24,7 +24,14 @@
   _config.s3.keyPrefix = "test_browser_";
 
   _config.s3.redirectUrlTemplate = function(data) {
-    return ("http://" + (server.address().host || "localhost") + ":" + (server.address().port || 80) + "/redir/") + _config.s3.keyPrefix + data.filename;
+    var _str;
+    _str = "http://" + (server.address().host || "localhost") + ":" + (server.address().port || 80) + "/redir/";
+    if (data.filename === "${filename}") {
+      _str += "*";
+    } else {
+      _str += _config.s3.keyPrefix + data.filename;
+    }
+    return _str;
   };
 
   FormGen = new AwsS3Form(_config.s3);
@@ -43,7 +50,7 @@
 
   app.get('/redir/:key', function(req, res) {
     var _data, _url;
-    _url = "https://s3." + _config.s3.region + ".amazonaws.com/" + _config.s3.bucket + "/" + req.params.key;
+    _url = "https://s3." + _config.s3.region + ".amazonaws.com/" + _config.s3.bucket + "/" + req.query.key;
     _data = {
       q: req.query,
       src: _url

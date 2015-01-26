@@ -15,7 +15,12 @@ utils = require( "../lib/utils" )
 
 _config.s3.keyPrefix = "test_browser_"
 _config.s3.redirectUrlTemplate = ( data )->
-	return "http://#{ server.address().host or "localhost" }:#{server.address().port or 80 }/redir/" + _config.s3.keyPrefix + data.filename
+	_str = "http://#{ server.address().host or "localhost" }:#{server.address().port or 80 }/redir/" 
+	if data.filename is "${filename}"
+		_str += "*" 
+	else
+		_str += _config.s3.keyPrefix + data.filename
+	return _str
 FormGen = new AwsS3Form( _config.s3 )
 
 app.get '/', (req, res)->
@@ -26,10 +31,11 @@ app.get '/', (req, res)->
 	return
 
 app.get '/redir/:key', (req, res)->
-	_url = "https://s3.#{ _config.s3.region }.amazonaws.com/#{ _config.s3.bucket }/#{req.params.key}"
+	_url = "https://s3.#{ _config.s3.region }.amazonaws.com/#{ _config.s3.bucket }/#{req.query.key}"
 	_data = 
 		q: req.query
 		src: _url
+
 	res.render( "img", _data )
 	return
 

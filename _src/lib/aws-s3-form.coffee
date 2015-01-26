@@ -133,6 +133,7 @@ class AwsS3Form extends require( "mpbasic" )()
 				#["content-length-range", 0, @settings.maxFileSize ]
 			]
 
+		@debug "generated policy", policy
 		if options.uuid?
 			policy.conditions.push { "x-amz-meta-uuid": options.uuid }
 

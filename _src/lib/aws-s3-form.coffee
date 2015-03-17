@@ -205,7 +205,7 @@ class AwsS3Form extends require( "mpbasic" )()
 			return @_handleError( null, "ENOREDIR" )
 		
 		if _.isString( tmpl ) 
-			return _.template( tmpl, data )
+			return _.template( tmpl )( data )
 		else if _.isFunction( tmpl )
 			return tmpl( data )
 		else 

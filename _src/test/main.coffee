@@ -16,7 +16,8 @@ _config = null
 
 
 redirPre = "://localhost:3010/redir/"
-testfileStream = null
+testfileStreamA = null
+testfileStreamB = null
 testfileName = null
 testfileMime = null
 
@@ -25,7 +26,8 @@ describe "----- aws-s3-form TESTS -----", ->
 	before ( done )->
 		_config = require( "../config_test.json" )
 		
-		testfileStream = fs.createReadStream(_config.mocha.file)
+		testfileStreamA = fs.createReadStream(_config.mocha.file)
+		testfileStreamB = fs.createReadStream(_config.mocha.file)
 		testfileName = path.basename( _config.mocha.file )
 		testfileMime = mime.lookup( _config.mocha.file )
 
@@ -45,17 +47,9 @@ describe "----- aws-s3-form TESTS -----", ->
 	describe 'Main Tests', ->
 		
 		_dataA = null
-		_filename = null 
-
-		# Implement tests cases here
-		it "create data", ( done )->
-			_filename = utils.randomString( 10 )
-			_opt = 
-				redirectUrlTemplate: ( if not _config.s3?.secure? or _config.s3.secure then "https" else "http" ) + redirPre + _filename
-
-			_dataA = _moduleInst.create( _filename, _opt )
-			done()
-			return
+		_filenameA = null 
+		_dataB = null
+		_filenameB = null 
 
 		it "test signing", ( done )->
 			# Example out of http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-post-example.html
@@ -70,13 +64,24 @@ describe "----- aws-s3-form TESTS -----", ->
 			done()
 			return
 
+		# Implement tests cases here
+		it "create data", ( done )->
+			_filenameA = utils.randomString( 10 )
+			_opt = 
+				redirectUrlTemplate: "https" + redirPre + _filenameA
+				secure: true
+
+			_dataA = _moduleInst.create( _filenameA, _opt )
+			done()
+			return
+
 
 		it "send file to s3", ( done )->
 			@timeout( 30000 )
 
 			formdata = _dataA.fields
 			formdata.file =
-				value: testfileStream
+				value: testfileStreamA
 				options:
 					filename: testfileName
 					contentType: testfileMime
@@ -106,13 +111,72 @@ describe "----- aws-s3-form TESTS -----", ->
 					
 					should.equal _pathobj.pathname, _redirobj.pathname
 					should.equal _pathobj.query.bucket, _config.s3.bucket
-					should.equal _pathobj.query.key, _config.s3.keyPrefix + _filename
+					should.equal _pathobj.query.key, _config.s3.keyPrefix + _filenameA
 					done()
 				return
 			return
 
 		it "check if file exists in s3", ( done )->
-			_url = "https://s3.#{ _config.s3.region }.amazonaws.com/#{ _config.s3.bucket }/#{_config.s3.keyPrefix + _filename}"
+			_url = "https://s3.#{ _config.s3.region }.amazonaws.com/#{ _config.s3.bucket }/#{_config.s3.keyPrefix + _filenameA}"
+			request.head _url, ( err, resp, body )=>
+				if err
+					throw err
+				should.equal( resp.statusCode, 200 )
+				done()
+				return
+			return
+
+		# Implement tests cases here
+		it "create data (no ssl)", ( done )->
+			_filenameB = utils.randomString( 10 )
+			_opt = 
+				redirectUrlTemplate: "http" + redirPre + _filenameB
+				secure: false
+			_dataB = _moduleInst.create( _filenameB, _opt )
+			done()
+			return
+
+		it "send file to s3 (no ssl)", ( done )->
+			@timeout( 30000 )
+
+			formdata = _dataB.fields
+			formdata.file =
+				value: testfileStreamB
+				options:
+					filename: testfileName
+					contentType: testfileMime
+			#console.log _dataB
+			request.post { url: _dataB.action, formData: formdata }, ( err, resp, body )=>
+				if err
+					console.log err
+					throw err
+				
+				
+				if resp.statusCode >= 400 or resp.statusCode < 200
+					xmlParse body, ( err, data )->
+						if err
+							console.log err
+							throw err
+
+						console.error( data )
+						throw "AWS ERROR"
+					return
+
+				if resp.statusCode is 303
+					_redirUrl = resp.headers.location
+
+					_pathobj = url.parse( _redirUrl, true )
+					_redirobj = url.parse( _dataB.fields.success_action_redirect )
+					
+					should.equal _pathobj.pathname, _redirobj.pathname
+					should.equal _pathobj.query.bucket, _config.s3.bucket
+					should.equal _pathobj.query.key, _config.s3.keyPrefix + _filenameB
+					done()
+				return
+			return
+
+		it "check if file exists in s3 (no ssl)", ( done )->
+			_url = "http://s3.#{ _config.s3.region }.amazonaws.com/#{ _config.s3.bucket }/#{_config.s3.keyPrefix + _filenameB}"
 			request.head _url, ( err, resp, body )=>
 				if err
 					throw err

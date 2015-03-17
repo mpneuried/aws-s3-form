@@ -58,6 +58,7 @@ class AwsS3Form extends require( "mpbasic" )()
 	@param { String } filename The S3 file key/filename to use.
 	@param { Object } [options] Create options
 	@param { String } [options.acl] Option to overwrite the general `acl`
+	@param { String } [options.secure] Option to overwrite the general `secure`
 	@param { String } [options.keyPrefix] Option to overwrite the general `keyPrefix`
 	@param { String } [options.redirectUrlTemplate] Option to overwrite the general `redirectUrlTemplate`
 	@param { Number|Date } [options.policyExpiration] Option to overwrite the general `policyExpiration`
@@ -80,9 +81,13 @@ class AwsS3Form extends require( "mpbasic" )()
 
 		_signature = @sign( _policyB64, options )
 
+		if options.secure?
+			_secure = options.secure
+		else
+			_secure = @config.secure
 
 		data =
-			action: "#{ if @config.secure then "https" else "http" }://#{ @config.bucket }.s3.amazonaws.com/"
+			action: "#{ if _secure then "https" else "http" }://#{ @config.bucket }.s3.amazonaws.com/"
 			filefield: "file"
 			fields:
 				key: "#{( options.keyPrefix or @config.keyPrefix )}#{filename}"

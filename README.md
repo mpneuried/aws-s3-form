@@ -188,6 +188,7 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.1.4|2015-03-17|Added option `secure` to create method|
 |0.1.2|2015-03-17|Added option `secure` to define the http type (http or https)|
 |0.0.5|2015-01-26|Updated readme and optimized example server|
 |0.0.4|2015-01-09|Initial version.|

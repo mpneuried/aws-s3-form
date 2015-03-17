@@ -60,6 +60,7 @@ formdata = formGen.create( "my-s3-filename-or-key" )
 - **secretAccessKey** *( `String` required )* AWS access secret
 - **region** *( `String` required )* AWS region
 - **bucket** *( `String` required )* AWS bucket name
+- **secure** *( `Boolean` optional: default = `true` )* Define if the action uses ssl. `true` = "https"; `false` = "http"
 - **redirectUrlTemplate** *( `String|Function` required )* a redirect url template.
 - **policyExpiration** *( `Date|Number` optional: default = `43200` )* Add time in seconds to now to define the expiration of the policy. Or set a hard Date *( `43200` = 12 hours )*.
 - **keyPrefix** *( `String` optional: default = `` )* Key prefix to define a policy that the key has to start with this value
@@ -187,8 +188,9 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.0.5|2015-1-26|Updated readme and optimized example server|
-|0.0.4|2015-1-09|Initial version.|
+|0.1.0|2015-03-17|Added option `secure` to define the http type (http or https)|
+|0.0.5|2015-01-26|Updated readme and optimized example server|
+|0.0.4|2015-01-09|Initial version.|
 
 [![NPM](https://nodei.co/npm-dl/aws-s3-form.png?months=6)](https://nodei.co/npm/aws-s3-form/)
 

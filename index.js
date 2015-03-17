@@ -1,5 +1,5 @@
 (function() {
-  exports.version = '0.0.4';
+  exports.version = '@@version';
 
   module.exports = require('./lib/aws-s3-form');
 

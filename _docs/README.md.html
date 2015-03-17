@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>README.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "", thisFile = "README.md", defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#aws-s3-form">aws-s3-form</a>
+      </div>
+      <div class="heading h2">
+        <a href="#install">Install</a>
+      </div>
+      <div class="heading h2">
+        <a href="#initialize">Initialize</a>
+      </div>
+      <div class="heading h2">
+        <a href="#basic%20usage">Basic Usage</a>
+      </div>
+      <div class="heading h3">
+        <a href="#security%20warning!">Security Warning!</a>
+      </div>
+      <div class="heading h2">
+        <a href="#methods">Methods</a>
+      </div>
+      <div class="heading h4">
+        <a href="#.create(%20filename%20%5B%2C%20options%20%5D%20)">.create( filename [, options ] )</a>
+      </div>
+      <div class="heading h4">
+        <a href="#.policy(%20filename%20%5B%2C%20options%20%5D%20)">.policy( filename [, options ] )</a>
+      </div>
+      <div class="heading h4">
+        <a href="#.sign(%20policyb64%20%5B%2C%20options%20%5D%20)">.sign( policyB64 [, options ] )</a>
+      </div>
+      <div class="heading h2">
+        <a href="#example%20server">Example Server</a>
+      </div>
+      <div class="heading h2">
+        <a href="#use%20cases">Use Cases</a>
+      </div>
+      <div class="heading h4">
+        <a href="#use%20origin%20filename%20as%20s3%20key%2Ffilename">use origin filename as S3 key/filename</a>
+      </div>
+      <div class="heading h2">
+        <a href="#todos">Todos</a>
+      </div>
+      <div class="heading h2">
+        <a href="#development%20and%20testing">Development and Testing</a>
+      </div>
+      <div class="heading h2">
+        <a href="#release%20history">Release History</a>
+      </div>
+      <div class="heading h2">
+        <a href="#other%20projects">Other projects</a>
+      </div>
+      <div class="heading h2">
+        <a href="#the%20mit%20license%20(mit)">The MIT License (MIT)</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="docs markdown">
+<div class="pilwrap" id="aws-s3-form">
+  <h1>
+    <a href="#aws-s3-form" name="aws-s3-form" class="pilcrow">&#182;</a>
+    aws-s3-form
+  </h1>
+</div>
+
+
+<p><a href="http://travis-ci.org/mpneuried/aws-s3-form"><img src="https://secure.travis-ci.org/mpneuried/aws-s3-form.png?branch=master" alt="Build Status" title="" /></a>
+<a href="https://david-dm.org/mpneuried/aws-s3-form"><img src="https://david-dm.org/mpneuried/aws-s3-form.png" alt="Dependencies" title="" /></a>
+<a href="http://badge.fury.io/js/aws-s3-form"><img src="https://badge.fury.io/js/aws-s3-form.png" alt="NPM version" title="" /></a></p>
+
+<p><a href="https://nodei.co/npm/aws-s3-form/"><img src="https://nodei.co/npm/aws-s3-form.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM" title="" /></a></p>
+
+<p>Generate a signed and ready to use formdata to put files to S3 directly from the browser. Signing is done by using AWS Signature Version 4 </p>
+
+
+<div class="pilwrap" id="install">
+  <h2>
+    <a href="#install" name="install" class="pilcrow">&#182;</a>
+    Install
+  </h2>
+</div>
+
+
+
+<div class="highlight"><pre><code>  npm install aws-s3-form
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="initialize">
+  <h2>
+    <a href="#initialize" name="initialize" class="pilcrow">&#182;</a>
+    Initialize
+  </h2>
+</div>
+
+
+
+<div class="highlight"><pre><code>  <span class="kd">var</span> <span class="nx">AwsS3Form</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span> <span class="s2">&quot;aws-s3-form&quot;</span> <span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">formGen</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AwsS3Form</span><span class="p">({</span>
+      <span class="nx">accessKeyId</span><span class="o">:</span>        <span class="s2">&quot;your-access-key&quot;</span><span class="p">,</span>
+      <span class="nx">secretAccessKey</span><span class="o">:</span>    <span class="s2">&quot;your-secret&quot;</span><span class="p">,</span>
+      <span class="nx">region</span><span class="o">:</span>             <span class="s2">&quot;us-east-1&quot;</span><span class="p">,</span>
+      <span class="nx">bucket</span><span class="o">:</span>             <span class="s2">&quot;my-bucket-name&quot;</span><span class="p">,</span>
+      <span class="nx">redirectUrlTemplate</span><span class="o">:</span><span class="s2">&quot;http://localhost:3010/redir/&lt;%= filename %&gt;&quot;</span>
+  <span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="basic%20usage">
+  <h2>
+    <a href="#basic%20usage" name="basic%20usage" class="pilcrow">&#182;</a>
+    Basic Usage
+  </h2>
+</div>
+
+
+
+<div class="highlight"><pre><code><span class="nx">formdata</span> <span class="o">=</span> <span class="nx">formGen</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span> <span class="s2">&quot;my-s3-filename-or-key&quot;</span> <span class="p">)</span>
+<span class="cm">/*</span>
+
+<span class="cm">    {</span>
+<span class="cm">        action: &quot;http://my-bucket-name.s3.amazonaws.com/&quot;,      // The form action url. Make sure to add also `method=&quot;POST&quot; enctype=&quot;multipart/form-data`</span>
+<span class="cm">        filefield: &quot;file&quot;,                                      // Name of the input field to upload a single file to S3.</span>
+<span class="cm">        fields: {                                               // Hidden fields to add to the form. Object-key = form-name and object-value = form-value</span>
+<span class="cm">            key: &quot;my-s3-filename-or-key&quot;,</span>
+<span class="cm">            acl: &quot;public-read&quot;,</span>
+<span class="cm">            success_action_redirect: &quot;http://localhost:3010/redir/my-s3-filename-or-key&quot;,</span>
+<span class="cm">            &quot;X-Amz-Credential&quot;: &quot;your-access-key/20150108/us-east-1/s3/aws4_request&quot;,</span>
+<span class="cm">            &quot;X-Amz-Algorithm&quot;: &quot;AWS4-HMAC-SHA256&quot;,</span>
+<span class="cm">            &quot;X-Amz-Date&quot;: &quot;20150108T103146Z&quot;,</span>
+<span class="cm">            &quot;Policy&quot;: &quot;eyJleHBpcmF0aW9uIj ... generated base64 policy ... XdpdGgiLCI&quot;,</span>
+<span class="cm">            &quot;X-Amz-Signature&quot;: &quot;4732d1 ... generated signature ... 1ac65d171a&quot;</span>
+<span class="cm">        }</span>
+<span class="cm">    }</span>
+
+<span class="cm"> */</span>
+</code></pre></div>
+
+
+
+<p><strong>Config</strong> </p>
+
+<ul>
+<li><strong>accessKeyId</strong> <em>( <code>String</code> required )</em> AWS access key</li>
+<li><strong>secretAccessKey</strong> <em>( <code>String</code> required )</em> AWS access secret</li>
+<li><strong>region</strong> <em>( <code>String</code> required )</em> AWS region</li>
+<li><strong>bucket</strong> <em>( <code>String</code> required )</em> AWS bucket name</li>
+<li><strong>secure</strong> <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Define if the action uses ssl. <code>true</code> = "https"; <code>false</code> = "http"</li>
+<li><strong>redirectUrlTemplate</strong> <em>( <code>String|Function</code> required )</em> a redirect url template.</li>
+<li><strong>policyExpiration</strong> <em>( <code>Date|Number</code> optional: default = <code>43200</code> )</em> Add time in seconds to now to define the expiration of the policy. Or set a hard Date <em>( <code>43200</code> = 12 hours )</em>.</li>
+<li><strong>keyPrefix</strong> <em>( <code>String</code> optional: default = `` )</em> Key prefix to define a policy that the key has to start with this value</li>
+<li><strong>acl</strong> <em>( <code>String</code> optional: default = <code>public-read</code> )</em> The standard acl type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
+<li><strong>useUuid</strong> <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Use a uuid for better security</li>
+</ul>
+
+
+<div class="pilwrap" id="security%20warning!">
+  <h3>
+    <a href="#security%20warning!" name="security%20warning!" class="pilcrow">&#182;</a>
+    Security Warning!
+  </h3>
+</div>
+
+
+<p>Do not hard code the <code>secretAccessKey</code> in your code if you want to open source it! ;-)</p>
+
+
+<div class="pilwrap" id="methods">
+  <h2>
+    <a href="#methods" name="methods" class="pilcrow">&#182;</a>
+    Methods
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id=".create(%20filename%20%5B%2C%20options%20%5D%20)">
+  <h4>
+    <a href="#.create(%20filename%20%5B%2C%20options%20%5D%20)" name=".create(%20filename%20%5B%2C%20options%20%5D%20)" class="pilcrow">&#182;</a>
+    <code>.create( filename [, options ] )</code>
+  </h4>
+</div>
+
+
+<p>Create new signed and ready to use formdata.</p>
+
+<p><strong>Arguments</strong></p>
+
+<ul>
+<li><code>filename</code> : <em>( <code>String</code> required )</em>: The S3 file key/filename to use.</li>
+<li><code>options</code> : <em>( <code>Object</code> optional )</em>: Options to change the configured behavior</li>
+<li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
+<li><code>options.keyPrefix</code> : <em>( <code>String</code> optional; default = <code>config.keyPrefix</code> )</em>: Change the configured standard <code>keyPrefix</code> type. Details see config object description.</li>
+<li><code>options.redirectUrlTemplate</code> : <em>( <code>String</code> optional; default = <code>config.redirectUrlTemplate</code> )</em>: Change the configured standard <code>redirectUrlTemplate</code> type. Details see config object description.</li>
+<li><code>options.policyExpiration</code> : <em>( <code>Date|Number</code> optional; default = <code>config.policyExpiration</code> )</em>: Change the configured standard <code>policyExpiration</code> type. Details see config object description.</li>
+</ul>
+
+<p><strong>Return</strong></p>
+
+<p><em>( Object )</em>: Data needed to generate a form that can upload files directly to AWS S3.
+ - <strong>action</strong> : <em>( <code>String</code> )</em> The form action url. Make sure to add also the attributes <code>method="POST" enctype="multipart/form-data</code>
+ - <strong>filefield</strong> : <em>( <code>String</code> )</em> Name of the input field to upload a single file to S3.
+ - <strong>fields</strong> : <em>( <code>Object</code> )</em> Hidden fields to add to the form. Object-key = form-name and object-value = form-value.</p>
+
+
+<div class="pilwrap" id=".policy(%20filename%20%5B%2C%20options%20%5D%20)">
+  <h4>
+    <a href="#.policy(%20filename%20%5B%2C%20options%20%5D%20)" name=".policy(%20filename%20%5B%2C%20options%20%5D%20)" class="pilcrow">&#182;</a>
+    <code>.policy( filename [, options ] )</code>
+  </h4>
+</div>
+
+
+<p>Create a new AWS S3 policy object based on AWS Signature Version 4.</p>
+
+<p><strong>Arguments</strong></p>
+
+<ul>
+<li><code>filename</code> : <em>( <code>String</code> required )</em>: The S3 file key/filename to use.</li>
+<li><code>options</code> : <em>( <code>Object</code> optional )</em>: Options to change the configured behavior</li>
+<li><code>options.now</code> : <em>( <code>Date</code> optional; default = <code>new Date()</code> )</em>: The current date-time for this policy</li>
+<li><code>options.uuid</code> : <em>( <code>String</code> optional;)</em>: The uuid to add to the policy</li>
+<li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
+<li><code>options.keyPrefix</code> : <em>( <code>String</code> optional; default = <code>config.keyPrefix</code> )</em>: Change the configured standard <code>keyPrefix</code> type. Details see config object description.</li>
+<li><code>options.redirectUrlTemplate</code> : <em>( <code>String</code> optional; default = <code>config.redirectUrlTemplate</code> )</em>: Change the configured standard <code>redirectUrlTemplate</code> type. Details see config object description.</li>
+<li><code>options.policyExpiration</code> : <em>( <code>Date|Number</code> optional; default = <code>config.policyExpiration</code> )</em>: Change the configured standard <code>policyExpiration</code> type. Details see config object description.</li>
+</ul>
+
+<p><strong>Return</strong></p>
+
+<p><em>( Object )</em>: A valid S3 POST policy.  </p>
+
+<blockquote>
+  <p>Details see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy">AWS Docs: Creating a POST Policy</a>.</p>
+</blockquote>
+
+
+<div class="pilwrap" id=".sign(%20policyb64%20%5B%2C%20options%20%5D%20)">
+  <h4>
+    <a href="#.sign(%20policyb64%20%5B%2C%20options%20%5D%20)" name=".sign(%20policyb64%20%5B%2C%20options%20%5D%20)" class="pilcrow">&#182;</a>
+    <code>.sign( policyB64 [, options ] )</code>
+  </h4>
+</div>
+
+
+<p>Create a AWS Signature Version 4. This is used to create the signature out of the policy.</p>
+
+<p><strong>Arguments</strong></p>
+
+<ul>
+<li><code>policyB64</code> : <em>( <code>String</code> required )</em>: Base64 encoded policy.</li>
+<li><code>options</code> : <em>( <code>Object</code> optional )</em>: Options to change the configured behavior</li>
+<li><code>options.now</code> : <em>( <code>Date</code> optional; default = <code>new Date()</code> )</em>: The current date-time for this signature</li>
+<li><code>options.signdate</code> : <em>( <code>String</code> optional; default = converted <code>options.now</code> )</em>: signature date</li>
+<li><code>options.secretAccessKey</code> : <em>( <code>String</code> optional; default = <code>config.secretAccessKey</code> )</em>: Change the configured standard <code>secretAccessKey</code> type. Details see config object description.</li>
+<li><code>options.region</code> : <em>( <code>String</code> optional; default = <code>config.region</code> )</em>: Change the configured standard <code>region</code> type. Details see config object description.
+<strong>Return</strong></li>
+</ul>
+
+<p><em>( Object )</em>: AWS Signature Version 4.  </p>
+
+<blockquote>
+  <p>Details see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-authentication-HTTPPOST.html">AWS Docs: Authenticating Requests in Browser-Based Uploads Using POST (AWS Signature Version 4)</a></p>
+</blockquote>
+
+
+<div class="pilwrap" id="example%20server">
+  <h2>
+    <a href="#example%20server" name="example%20server" class="pilcrow">&#182;</a>
+    Example Server
+  </h2>
+</div>
+
+
+<p>You can see a working example express server <a href="https://github.com/mpneuried/aws-s3-form/blob/master/_src/test/server.coffee">here</a> and the corresponding jade template <a href="https://github.com/mpneuried/aws-s3-form/blob/master/_testviews/index.jade">here</a>. </p>
+
+
+<div class="pilwrap" id="use%20cases">
+  <h2>
+    <a href="#use%20cases" name="use%20cases" class="pilcrow">&#182;</a>
+    Use Cases
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id="use%20origin%20filename%20as%20s3%20key%2Ffilename">
+  <h4>
+    <a href="#use%20origin%20filename%20as%20s3%20key%2Ffilename" name="use%20origin%20filename%20as%20s3%20key%2Ffilename" class="pilcrow">&#182;</a>
+    use origin filename as S3 key/filename
+  </h4>
+</div>
+
+
+<p>It is a typical use case to reuse the original filename as s3 key.
+To handle this correctly this is the example to do it correctly.</p>
+
+<p>```js
+  var AwsS3Form = require( "aws-s3-form" );</p>
+
+<p>var formGen = new AwsS3Form({
+      accessKeyId:        "your-access-key",
+      secretAccessKey:    "your-secret",
+      region:             "us-east-1",
+      bucket:             "my-bucket-name",
+      redirectUrlTemplate:"<a href='http://localhost:3010/redir/*'>http://localhost:3010/redir/*</a>"
+  });</p>
+
+<p>var myForm = formGen.create( "${filename}" );</p>
+
+<p>/ ... handle the data</p>
+
+<p>``` </p>
+
+<p>The key points are, that you have to specify:</p>
+
+<ul>
+<li>the redirect with <code>*</code> at the end</li>
+<li>the filename with the placeholder <code>${filename}</code></li>
+</ul>
+
+<p><em>This is also implemented within the example server as special case</em></p>
+
+<blockquote>
+  <p>Requested by <a href="https://github.com/mpneuried/aws-s3-form/issues/1">jontelm #1</a></p>
+</blockquote>
+
+
+<div class="pilwrap" id="todos">
+  <h2>
+    <a href="#todos" name="todos" class="pilcrow">&#182;</a>
+    Todos
+  </h2>
+</div>
+
+
+<ul>
+<li>Mimetype guessing based on the given key/filename</li>
+<li>Better policy generator to be able to add mimetype, filesize, ... policies.</li>
+<li>get credentials by environment variables or Shared Credentials File. <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html">Details</a></li>
+</ul>
+
+
+<div class="pilwrap" id="development%20and%20testing">
+  <h2>
+    <a href="#development%20and%20testing" name="development%20and%20testing" class="pilcrow">&#182;</a>
+    Development and Testing
+  </h2>
+</div>
+
+
+<p>If you want to contribute you have to clone the git repository and init it:</p>
+
+
+<div class="highlight"><pre><code>npm install
+grunt build
+</code></pre></div>
+
+
+
+<p>Then configure the tests by copy the file <code>_skeleton_config_test.json</code> to <code>config_test.json</code> and fill in the correct data.
+Then you are able to run <code>grunt test</code> or start the express example in <code>test/server.js</code>.</p>
+
+
+<div class="pilwrap" id="release%20history">
+  <h2>
+    <a href="#release%20history" name="release%20history" class="pilcrow">&#182;</a>
+    Release History
+  </h2>
+</div>
+
+
+<p>|Version|Date|Description|
+|:--:|:--:|:--|
+|0.1.0|2015-03-17|Added option <code>secure</code> to define the http type (http or https)|
+|0.0.5|2015-01-26|Updated readme and optimized example server|
+|0.0.4|2015-01-09|Initial version.|</p>
+
+<p><a href="https://nodei.co/npm/aws-s3-form/"><img src="https://nodei.co/npm-dl/aws-s3-form.png?months=6" alt="NPM" title="" /></a></p>
+
+
+<div class="pilwrap" id="other%20projects">
+  <h2>
+    <a href="#other%20projects" name="other%20projects" class="pilcrow">&#182;</a>
+    Other projects
+  </h2>
+</div>
+
+
+<p>|Name|Description|
+|:--|:--|
+|<a href="https://github.com/tcs-de/nodecache"><strong>node-cache</strong></a>|Simple and fast NodeJS internal caching. Node internal in memory cache like memcached.|
+|<a href="https://github.com/smrchy/rsmq"><strong>rsmq</strong></a>|A really simple message queue based on Redis|
+|<a href="https://github.com/smrchy/redis-sessions"><strong>redis-sessions</strong></a>|An advanced session store for NodeJS and Redis|
+|<a href="https://github.com/mpneuried/connect-redis-sessions"><strong>connect-redis-sessions</strong></a>|A connect or express middleware to simply use the <a href="https://github.com/smrchy/redis-sessions">redis sessions</a>. With <a href="https://github.com/smrchy/redis-sessions">redis sessions</a> you can handle multiple sessions per user_id.|
+|<a href="https://github.com/mpneuried/redis-heartbeat"><strong>redis-heartbeat</strong></a>|Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems.|
+|<a href="https://github.com/mpneuried/systemhealth"><strong>systemhealth</strong></a>|Node module to run simple custom checks for your machine or it's connections. It will use <a href="https://github.com/mpneuried/redis-heartbeat">redis-heartbeat</a> to send the current state to redis.|
+|<a href="https://github.com/smrchy/task-queue-worker"><strong>task-queue-worker</strong></a>|A powerful tool for background processing of tasks that are run by making standard http requests.|
+|<a href="https://github.com/mpneuried/soyer"><strong>soyer</strong></a>|Soyer is small lib for serverside use of Google Closure Templates with node.js.|
+|<a href="https://github.com/mpneuried/grunt-soy-compile"><strong>grunt-soy-compile</strong></a>|Compile Goggle Closure Templates ( SOY ) templates inclding the handling of XLIFF language files.|
+|<a href="https://github.com/mpneuried/backlunr"><strong>backlunr</strong></a>|A solution to bring Backbone Collections together with the browser fulltext search engine Lunr.js|</p>
+
+
+<div class="pilwrap" id="the%20mit%20license%20(mit)">
+  <h2>
+    <a href="#the%20mit%20license%20(mit)" name="the%20mit%20license%20(mit)" class="pilcrow">&#182;</a>
+    The MIT License (MIT)
+  </h2>
+</div>
+
+
+<p>Copyright © 2015 Mathias Peter, <a href='http://www.tcs.de'>http://www.tcs.de</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></div>
+  </div>
+</body>
+</html>

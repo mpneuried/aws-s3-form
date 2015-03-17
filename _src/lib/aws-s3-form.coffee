@@ -35,6 +35,8 @@ class AwsS3Form extends require( "mpbasic" )()
 			region: "eu-central-1"
 			# **AwsS3Form.bucket** *String* AWS bucket name
 			bucket: null
+			# **AwsS3Form.secure** *Boolean* Define if the action uses ssl. `true` = "https"; `false` = "http"
+			secure: true
 			# **AwsS3Form.redirectUrlTemplate** *String|Function* a redirect url template.
 			redirectUrlTemplate: null
 			# **AwsS3Form.policyExpiration** *Date|Number* Add time in seconds to now to define the expiration of the policy. Or set a hard Date.
@@ -80,7 +82,7 @@ class AwsS3Form extends require( "mpbasic" )()
 
 
 		data =
-			action: "http://#{ @config.bucket }.s3.amazonaws.com/"
+			action: "#{ if @config.secure then "https" else "http" }://#{ @config.bucket }.s3.amazonaws.com/"
 			filefield: "file"
 			fields:
 				key: "#{( options.keyPrefix or @config.keyPrefix )}#{filename}"

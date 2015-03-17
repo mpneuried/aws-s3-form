@@ -14,7 +14,8 @@ utils = require( "../lib/utils" )
 _moduleInst = null
 _config = null
 
-redirPre = "http://localhost:3010/redir/"
+
+redirPre = "://localhost:3010/redir/"
 testfileStream = null
 testfileName = null
 testfileMime = null
@@ -50,7 +51,7 @@ describe "----- aws-s3-form TESTS -----", ->
 		it "create data", ( done )->
 			_filename = utils.randomString( 10 )
 			_opt = 
-				redirectUrlTemplate: redirPre + _filename
+				redirectUrlTemplate: ( if not _config.s3?.secure? or _config.s3.secure then "https" else "http" ) + redirPre + _filename
 
 			_dataA = _moduleInst.create( _filename, _opt )
 			done()
@@ -71,6 +72,7 @@ describe "----- aws-s3-form TESTS -----", ->
 
 
 		it "send file to s3", ( done )->
+			@timeout( 30000 )
 
 			formdata = _dataA.fields
 			formdata.file =
@@ -78,8 +80,9 @@ describe "----- aws-s3-form TESTS -----", ->
 				options:
 					filename: testfileName
 					contentType: testfileMime
-			#console.log formdata
+			#console.log _dataA
 			request.post { url: _dataA.action, formData: formdata }, ( err, resp, body )=>
+				#console.log  err, resp, body
 				if err
 					console.log err
 					throw err

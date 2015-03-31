@@ -23,6 +23,7 @@ class AwsS3Form extends require( "mpbasic" )()
 
 	validation:
 		acl: [ "public-read", "authenticated-read" ]
+		successActionStatus: [200, 201, 204]
 
 	# ## defaults
 	defaults: =>
@@ -38,7 +39,7 @@ class AwsS3Form extends require( "mpbasic" )()
 			# **AwsS3Form.secure** *Boolean* Define if the action uses ssl. `true` = "https"; `false` = "http"
 			secure: true
 			# **AwsS3Form.redirectUrlTemplate** *String|Function* a redirect url template.
-			redirectUrlTemplate: null,
+			redirectUrlTemplate: null
 			# **AwsS3Form.redirectUrlTemplate** *Number* HTTP code to return when no redirectUrlTemplate is defined.
 			successActionStatus: 204
 			# **AwsS3Form.policyExpiration** *Date|Number* Add time in seconds to now to define the expiration of the policy. Or set a hard Date.
@@ -103,7 +104,7 @@ class AwsS3Form extends require( "mpbasic" )()
 		if options.redirectUrlTemplate
 			data.fields.success_action_redirect = @_redirectUrl( options.redirectUrlTemplate, filename: filename )
 		else
-			data.fields.success_action_status = options.successActionStatus
+			data.fields.success_action_status = @_successActionStatus( options.successActionStatus )
 
 		if options.uuid?
 			data.fields[ "x-amz-meta-uuid" ] = options.uuid
@@ -221,6 +222,11 @@ class AwsS3Form extends require( "mpbasic" )()
 			return tmpl( data )
 		else
 			return @_handleError( null, "EINVALIDREDIR" )
+
+	_successActionStatus: ( successActionStatus = @config.successActionStatus )=>
+		if successActionStatus not in @validation.successActionStatus
+			return @_handleError( null, "EINVALIDSTATUS", val: successActionStatus )
+		return successActionStatus
 
 	###
 	## _calcDate

@@ -168,7 +168,8 @@
 <li><strong>region</strong> <em>( <code>String</code> required )</em> AWS region</li>
 <li><strong>bucket</strong> <em>( <code>String</code> required )</em> AWS bucket name</li>
 <li><strong>secure</strong> <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Define if the action uses ssl. <code>true</code> = "https"; <code>false</code> = "http"</li>
-<li><strong>redirectUrlTemplate</strong> <em>( <code>String|Function</code> required )</em> a redirect url template.</li>
+<li><strong>redirectUrlTemplate</strong> <em>( <code>String|Function</code> optional )</em> a redirect url template.</li>
+<li><strong>successActionStatus</strong> <em>( <code>String|Number</code> optional: default = <code>204</code> )</em> HTTP code to return when no redirectUrlTemplate is defined.</li>
 <li><strong>policyExpiration</strong> <em>( <code>Date|Number</code> optional: default = <code>43200</code> )</em> Add time in seconds to now to define the expiration of the policy. Or set a hard Date <em>( <code>43200</code> = 12 hours )</em>.</li>
 <li><strong>keyPrefix</strong> <em>( <code>String</code> optional: default = `` )</em> Key prefix to define a policy that the key has to start with this value</li>
 <li><strong>acl</strong> <em>( <code>String</code> optional: default = <code>public-read</code> )</em> The standard acl type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
@@ -214,6 +215,7 @@
 <li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
 <li><code>options.keyPrefix</code> : <em>( <code>String</code> optional; default = <code>config.keyPrefix</code> )</em>: Change the configured standard <code>keyPrefix</code> type. Details see config object description.</li>
 <li><code>options.redirectUrlTemplate</code> : <em>( <code>String</code> optional; default = <code>config.redirectUrlTemplate</code> )</em>: Change the configured standard <code>redirectUrlTemplate</code> type. Details see config object description.</li>
+<li><code>options.successActionStatus</code> : <em>( <code>String|Number</code> optional; default = <code>config.successActionStatus</code> )</em>: Change the configured standard <code>successActionStatus</code> type. Details see config object description.</li>
 <li><code>options.policyExpiration</code> : <em>( <code>Date|Number</code> optional; default = <code>config.policyExpiration</code> )</em>: Change the configured standard <code>policyExpiration</code> type. Details see config object description.</li>
 </ul>
 
@@ -245,6 +247,7 @@
 <li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
 <li><code>options.keyPrefix</code> : <em>( <code>String</code> optional; default = <code>config.keyPrefix</code> )</em>: Change the configured standard <code>keyPrefix</code> type. Details see config object description.</li>
 <li><code>options.redirectUrlTemplate</code> : <em>( <code>String</code> optional; default = <code>config.redirectUrlTemplate</code> )</em>: Change the configured standard <code>redirectUrlTemplate</code> type. Details see config object description.</li>
+<li><code>options.successActionStatus</code> : <em>( <code>Number</code> optional; default = <code>config.successActionStatus</code> )</em>: Change the configured standard <code>successActionStatus</code> type. Details see config object description.</li>
 <li><code>options.policyExpiration</code> : <em>( <code>Date|Number</code> optional; default = <code>config.policyExpiration</code> )</em>: Change the configured standard <code>policyExpiration</code> type. Details see config object description.</li>
 </ul>
 
@@ -394,7 +397,8 @@ Then you are able to run <code>grunt test</code> or start the express example in
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
-|0.1.3|2015-03-17|Added option <code>secure</code> to create method|
+|0.2.0|2015-04-07|Added option <code>successActionStatus</code> to make ajax form posts possible|
+|0.1.4|2015-03-17|Added option <code>secure</code> to create method|
 |0.1.2|2015-03-17|Added option <code>secure</code> to define the http type (http or https)|
 |0.0.5|2015-01-26|Updated readme and optimized example server|
 |0.0.4|2015-01-09|Initial version.|</p>

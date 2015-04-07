@@ -1,3 +1,4 @@
+path = require( "path" )
 _config = require( "../config_test.json" )
 
 _ = require( "lodash" )
@@ -7,14 +8,14 @@ CONFIG = _.defaults _config.example or {},
 express = require('express')
 app = express()
 app.set('view engine', 'jade')
-app.set('views', '../_testviews')
+app.set('views', path.resolve( __dirname + '/../_testviews' ))
 
 
 AwsS3Form = require( "../." )
 utils = require( "../lib/utils" )
 
 _config.s3.keyPrefix = "test_browser_"
-_config.s3.redirectUrlTemplate = ( data )->
+redirectUrlTemplate = ( data )->
 	_str = "http://#{ server.address().host or "localhost" }:#{server.address().port or 80 }/redir/" 
 	if data.filename is "${filename}"
 		_str += "*" 
@@ -25,9 +26,16 @@ FormGen = new AwsS3Form( _config.s3 )
 
 app.get '/', (req, res)->
 	_key = req.query.key
+	_statuscode = req.query.statuscode
+	console.log _config.s3.keyPrefix, _key
 	if not _key?
 		_key = utils.randomString( 10 )
-	res.render( "index", { q: req.query, example: FormGen.create( _key, _.pick( req.query, [ "acl" ] ) ) } )
+	_opts = _.pick( req.query, [ "acl" ] )
+	if _statuscode
+		_opts.successActionStatus = _statuscode
+	else
+		_opts.redirectUrlTemplate = redirectUrlTemplate
+	res.render( "index", { q: req.query, example: FormGen.create( _key, _opts ) } )
 	return
 
 app.get '/redir/:key', (req, res)->

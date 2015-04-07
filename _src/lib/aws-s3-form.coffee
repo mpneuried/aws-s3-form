@@ -23,10 +23,11 @@ class AwsS3Form extends require( "mpbasic" )()
 
 	validation:
 		acl: [ "public-read", "authenticated-read" ]
+		successActionStatus: [200, 201, 204]
 
 	# ## defaults
 	defaults: =>
-		@extend super, 
+		@extend super,
 			# **AwsS3Form.accessKeyId** *String* AWS access key
 			accessKeyId: "set-in-config-json"
 			# **AwsS3Form.secretAccessKey** *String* AWS access secret
@@ -39,6 +40,8 @@ class AwsS3Form extends require( "mpbasic" )()
 			secure: true
 			# **AwsS3Form.redirectUrlTemplate** *String|Function* a redirect url template.
 			redirectUrlTemplate: null
+			# **AwsS3Form.redirectUrlTemplate** *Number* HTTP code to return when no redirectUrlTemplate is defined.
+			successActionStatus: 204
 			# **AwsS3Form.policyExpiration** *Date|Number* Add time in seconds to now to define the expiration of the policy. Or set a hard Date.
 			policyExpiration: 60*60*12 # Default 12 hrs
 			# **AwsS3Form.keyPrefix** *String* Key prefix to define a policy that the key has to start with this value
@@ -61,6 +64,7 @@ class AwsS3Form extends require( "mpbasic" )()
 	@param { String } [options.secure] Option to overwrite the general `secure`
 	@param { String } [options.keyPrefix] Option to overwrite the general `keyPrefix`
 	@param { String } [options.redirectUrlTemplate] Option to overwrite the general `redirectUrlTemplate`
+	@param { String } [options.successActionStatus] Option to overwrite the general `successActionStatus`
 	@param { Number|Date } [options.policyExpiration] Option to overwrite the general `policyExpiration`
 	
 	@api public
@@ -74,9 +78,16 @@ class AwsS3Form extends require( "mpbasic" )()
 
 		_data = 
 			acl: @_acl( options.acl )
-			success_action_redirect: @_redirectUrl( options.redirectUrlTemplate, filename: filename )
 			credential: @_createCredential( options.now )
 			amzdate: @_shortDate( options.now )
+
+		if options.redirectUrlTemplate?
+			_data.success_action_redirect = @_redirectUrl( options.redirectUrlTemplate, filename: filename )
+		else
+			if _.isString( options.successActionStatus )
+				options.successActionStatus = parseInt( options.successActionStatus, 10 )
+			_data.success_action_status = @_successActionStatus( options.successActionStatus )
+
 		_policyB64 = @_obj2b64( @policy( filename, options, _data ) )
 
 		_signature = @sign( _policyB64, options )
@@ -87,17 +98,21 @@ class AwsS3Form extends require( "mpbasic" )()
 			_secure = @config.secure
 
 		data =
-			action: "#{ if _secure then "https" else "http" }://#{ @config.bucket }.s3.amazonaws.com/"
+			action: "#{ if _secure then "https" else "http" }://s3-#{@config.region}.amazonaws.com/#{ @config.bucket }"
 			filefield: "file"
 			fields:
 				key: "#{( options.keyPrefix or @config.keyPrefix )}#{filename}"
 				acl: _data.acl
-				success_action_redirect: _data.success_action_redirect
 				"X-Amz-Credential": _data.credential
 				"X-Amz-Algorithm": "AWS4-HMAC-SHA256"
 				"X-Amz-Date": _data.amzdate
 				"Policy": _policyB64
 				"X-Amz-Signature": _signature.toString()
+
+		if options.redirectUrlTemplate?
+			data.fields.success_action_redirect = @_redirectUrl( options.redirectUrlTemplate, filename: filename )
+		else
+			data.fields.success_action_status = @_successActionStatus( options.successActionStatus )
 
 		if options.uuid?
 			data.fields[ "x-amz-meta-uuid" ] = options.uuid
@@ -129,16 +144,20 @@ class AwsS3Form extends require( "mpbasic" )()
 		policy = 
 			expiration: @_calcDate( options.policyExpiration or @config.policyExpiration, _date )
 			conditions: [
-				{ bucket: @config.bucket }
+				{ "bucket": @config.bucket }
 				[ "starts-with", "$key", ( options.keyPrefix or @config.keyPrefix ) ]
-				{ acl: _predef.acl or @_acl( options.acl ) }
-				{ success_action_redirect: _predef.success_action_redirect or @_redirectUrl( options.redirectUrlTemplate, filename: filename ) }
+				{ "acl": _predef.acl or @_acl( options.acl ) }
 				{ "x-amz-credential": _predef.credential or @_createCredential( _date ) }
 				{ "x-amz-algorithm": "AWS4-HMAC-SHA256" }
 				{ "x-amz-date": _predef.amzdate or @_shortDate( _date ) }
 				#[ "starts-with", "$Content-Type", contentType ]
 				#["content-length-range", 0, @settings.maxFileSize ]
 			]
+
+		if _predef.success_action_status?
+			policy.conditions.push { "success_action_status": _predef.success_action_status.toString()}
+		else
+			policy.conditions.push { "success_action_redirect": _predef.success_action_redirect or @_redirectUrl( options.redirectUrlTemplate, filename: filename ) }
 
 		@debug "generated policy", policy
 		if options.uuid?
@@ -215,6 +234,25 @@ class AwsS3Form extends require( "mpbasic" )()
 			return tmpl( data )
 		else 
 			return @_handleError( null, "EINVALIDREDIR" )
+
+	###
+	## _successActionStatus
+
+	`AwsS3Form._successActionStatus( status )`
+
+	Gets the HTTP status code that AWS will return if a redirectUrlTemplate is not defined.
+
+	@param { Number } status The status code that should be set on successful upload
+
+	@return { Number } A redirect url
+
+	@api private
+	###
+	_successActionStatus: ( status = @config.successActionStatus )=>
+		console.log status, typeof status, @validation.successActionStatus
+		if status not in @validation.successActionStatus
+			return @_handleError( null, "EINVALIDSTATUS", val: status )
+		return status.toString()
 
 	###
 	## _calcDate
@@ -328,6 +366,7 @@ class AwsS3Form extends require( "mpbasic" )()
 		"ENOTDATE": [ 500, "Invalid date `<%= val %>`. Please use a valid date object or number as timestamp" ]
 		"EOLDDATE": [ 500, "Date `<%= val %>` to old. Only dates in the future are allowed" ]
 		"EINVALIDACL": [ 500, "The given acl `<%= val %>` is not valid. Only `#{@validation.acl.join('`, `')}` is allowed." ]
+		"EINVALIDSTATUS": [ 500, "The given successActionStatus `<%= val %>` is not valid. Only `#{@validation.successActionStatus.join('`, `')}` is allowed." ]
 		"ENOREDIR": [ 500, "You have to define a `redirectUrlTemplate` as config or `.create()` option." ]
 		"EINVALIDREDIR": [ 500, "Only a string or function is valid as redirect url." ]
 

@@ -12,15 +12,15 @@ module.exports =
 	`utils.randomString( string_length, speciallevel )`
 	
 	Generate a random string
-	
-	@param { Number } string_length string length to generate 
+
+	@param { Number } string_length string length to generate
 	@param { Number } speciallevel Level of complexity.
 		* 0 = only letters upper and lowercase, 52 possible chars;
 		* 1 = 0 + Numbers, 62 possible chars;
 		* 2 = 1 + "_-@:.", 67 possible chars;
 		* 3 = 2 + may speacial chars, 135 possible chars;
-	
-	@return { String } The gerated string 
+
+	@return { String } The gerated string
 	###
 	randomString: ( string_length = 5, specialLevel = 0 ) ->
 		chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"

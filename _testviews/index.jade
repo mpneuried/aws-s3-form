@@ -29,6 +29,15 @@ html
 								option( selected= q.acl == "authenticated-read" ) authenticated-read 
 					.col-sm-3
 						.form-group
+							label( for="contenttype" ) Set file mime type: 
+							select.form-control#contenttype( name="contenttype" type="select" )
+								option( selected= q.contenttype == "" value="" ) None
+								option( selected= q.contenttype == "image/jpeg" ) image/jpeg
+								option( selected= q.contenttype == "text/plain" ) text/plain
+								option( selected= q.contenttype == "text/html" ) text/html
+								option( selected= q.contenttype == "application/pdf" ) application/pdf
+					.col-sm-3
+						.form-group
 							label( for="statuscode" ) StatusCode-Policy: 
 							input.form-control#statuscode( name="statuscode" value=q.statuscode )
 							span.help-block
@@ -93,6 +102,3 @@ html
 					.col-sm-6
 						h4	Result
 						iframe( name="s3target" width="100%", height="500" )
-
-
-

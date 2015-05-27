@@ -214,6 +214,8 @@
 <li><code>options</code> : <em>( <code>Object</code> optional )</em>: Options to change the configured behavior</li>
 <li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
 <li><code>options.keyPrefix</code> : <em>( <code>String</code> optional; default = <code>config.keyPrefix</code> )</em>: Change the configured standard <code>keyPrefix</code> type. Details see config object description.</li>
+<li><code>options.contentType</code> : <em>( <code>String|Boolean</code> optional; )</em>:  Option to set the content type of the uploaded file. This could be a string with a fixed mime or a boolean to decide if the mime will be guessed by the filename.</li>
+<li><code>options.customConditions</code> : <em>( <code>Array</code> optional; )</em>: Option to set s3 upload conditions. For details see <a href='http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html'>http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html</a></li>
 <li><code>options.redirectUrlTemplate</code> : <em>( <code>String</code> optional; default = <code>config.redirectUrlTemplate</code> )</em>: Change the configured standard <code>redirectUrlTemplate</code> type. Details see config object description.</li>
 <li><code>options.successActionStatus</code> : <em>( <code>String|Number</code> optional; default = <code>config.successActionStatus</code> )</em>: Change the configured standard <code>successActionStatus</code> type. Details see config object description.</li>
 <li><code>options.policyExpiration</code> : <em>( <code>Date|Number</code> optional; default = <code>config.policyExpiration</code> )</em>: Change the configured standard <code>policyExpiration</code> type. Details see config object description.</li>
@@ -246,6 +248,7 @@
 <li><code>options.uuid</code> : <em>( <code>String</code> optional;)</em>: The uuid to add to the policy</li>
 <li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
 <li><code>options.keyPrefix</code> : <em>( <code>String</code> optional; default = <code>config.keyPrefix</code> )</em>: Change the configured standard <code>keyPrefix</code> type. Details see config object description.</li>
+<li><code>options.customConditions</code> : <em>( <code>Array</code> optional; )</em>: Option to set s3 upload conditions. For details see <a href='http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html'>http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html</a></li>
 <li><code>options.redirectUrlTemplate</code> : <em>( <code>String</code> optional; default = <code>config.redirectUrlTemplate</code> )</em>: Change the configured standard <code>redirectUrlTemplate</code> type. Details see config object description.</li>
 <li><code>options.successActionStatus</code> : <em>( <code>Number</code> optional; default = <code>config.successActionStatus</code> )</em>: Change the configured standard <code>successActionStatus</code> type. Details see config object description.</li>
 <li><code>options.policyExpiration</code> : <em>( <code>Date|Number</code> optional; default = <code>config.policyExpiration</code> )</em>: Change the configured standard <code>policyExpiration</code> type. Details see config object description.</li>
@@ -397,6 +400,7 @@ Then you are able to run <code>grunt test</code> or start the express example in
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.0|2015-05-27|Added <code>contentType</code> to options and optional <code>customConditions</code> to define a custom aws-s3 policy |
 |0.2.0|2015-04-07|Added option <code>successActionStatus</code> to make ajax form posts possible|
 |0.1.4|2015-03-17|Added option <code>secure</code> to create method|
 |0.1.2|2015-03-17|Added option <code>secure</code> to define the http type (http or https)|

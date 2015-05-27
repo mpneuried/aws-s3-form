@@ -6,7 +6,8 @@
 		"bucket": " - Please define your test bucket - "
 	},
 	"mocha":{
-		"file": " - Please define the path to your test file - "
+		"file": " - Please define the path to your test file - ",
+		"mime": "image/jpeg"
 	},
 	"example": {
 		"port": 3010

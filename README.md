@@ -84,6 +84,8 @@ Create new signed and ready to use formdata.
 * `options` : *( `Object` optional )*: Options to change the configured behavior
 * `options.acl` : *( `String` optional; default = `config.acl` )*: Change the configured standard `acl` type. Only `public-read` and `authenticated-read` are allowed
 * `options.keyPrefix` : *( `String` optional; default = `config.keyPrefix` )*: Change the configured standard `keyPrefix` type. Details see config object description.
+* `options.contentType` : *( `String|Boolean` optional; )*:  Option to set the content type of the uploaded file. This could be a string with a fixed mime or a boolean to decide if the mime will be guessed by the filename.
+* `options.customConditions` : *( `Array` optional; )*: Option to set s3 upload conditions. For details see http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html
 * `options.redirectUrlTemplate` : *( `String` optional; default = `config.redirectUrlTemplate` )*: Change the configured standard `redirectUrlTemplate` type. Details see config object description.
 * `options.successActionStatus` : *( `String|Number` optional; default = `config.successActionStatus` )*: Change the configured standard `successActionStatus` type. Details see config object description.
 * `options.policyExpiration` : *( `Date|Number` optional; default = `config.policyExpiration` )*: Change the configured standard `policyExpiration` type. Details see config object description.
@@ -107,6 +109,7 @@ Create a new AWS S3 policy object based on AWS Signature Version 4.
 * `options.uuid` : *( `String` optional;)*: The uuid to add to the policy
 * `options.acl` : *( `String` optional; default = `config.acl` )*: Change the configured standard `acl` type. Only `public-read` and `authenticated-read` are allowed
 * `options.keyPrefix` : *( `String` optional; default = `config.keyPrefix` )*: Change the configured standard `keyPrefix` type. Details see config object description.
+* `options.customConditions` : *( `Array` optional; )*: Option to set s3 upload conditions. For details see http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html
 * `options.redirectUrlTemplate` : *( `String` optional; default = `config.redirectUrlTemplate` )*: Change the configured standard `redirectUrlTemplate` type. Details see config object description.
 * `options.successActionStatus` : *( `Number` optional; default = `config.successActionStatus` )*: Change the configured standard `successActionStatus` type. Details see config object description.
 * `options.policyExpiration` : *( `Date|Number` optional; default = `config.policyExpiration` )*: Change the configured standard `policyExpiration` type. Details see config object description.
@@ -191,6 +194,7 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.0|2015-05-27|Added `contentType` to options and optional `customConditions` to define a custom aws-s3 policy |
 |0.2.0|2015-04-07|Added option `successActionStatus` to make ajax form posts possible|
 |0.1.4|2015-03-17|Added option `secure` to create method|
 |0.1.2|2015-03-17|Added option `secure` to define the http type (http or https)|

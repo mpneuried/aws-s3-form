@@ -14,6 +14,7 @@ crypto = require( "crypto" )
 # **npm modules**
 _ = require('lodash')
 uuid = require('node-uuid')
+mime = require('mime')
 
 # **internal modules**
 # [Utils](./utils.coffee.html)
@@ -63,6 +64,7 @@ class AwsS3Form extends require( "mpbasic" )()
 	@param { String } [options.acl] Option to overwrite the general `acl`
 	@param { String } [options.secure] Option to overwrite the general `secure`
 	@param { String } [options.keyPrefix] Option to overwrite the general `keyPrefix`
+	@param { String|Boolean } [options.contentType] Option to set the content type of the uploaded file. This could be a string with a fixed mime or a boolean to decide if the mime will be guessed by the filename.
 	@param { String } [options.redirectUrlTemplate] Option to overwrite the general `redirectUrlTemplate`
 	@param { String } [options.successActionStatus] Option to overwrite the general `successActionStatus`
 	@param { Number|Date } [options.policyExpiration] Option to overwrite the general `policyExpiration`
@@ -75,11 +77,17 @@ class AwsS3Form extends require( "mpbasic" )()
 		options.now = new Date()
 		if @config.useUuid
 			options.uuid = uuid.v4()
-
+		
+		if  options.contentType? and _.isString( options.contentType )
+			_cType = options.contentType
+		else if options.contentType
+			_cType = mime.lookup( filename )
+		
 		_data =
 			acl: @_acl( options.acl )
 			credential: @_createCredential( options.now )
 			amzdate: @_shortDate( options.now )
+			contentType: _cType
 
 		if options.redirectUrlTemplate?
 			_data.success_action_redirect = @_redirectUrl( options.redirectUrlTemplate, filename: filename )
@@ -116,6 +124,9 @@ class AwsS3Form extends require( "mpbasic" )()
 
 		if options.uuid?
 			data.fields[ "x-amz-meta-uuid" ] = options.uuid
+		
+		if _cType?
+			data.fields[ "Content-Type" ] = _cType
 
 		return data
 
@@ -132,13 +143,13 @@ class AwsS3Form extends require( "mpbasic" )()
 	@param { String } [options.uuid] The uuid to add to the policy
 	@param { String } [options.acl] Option to overwrite the general `acl`
 	@param { String } [options.keyPrefix] Option to overwrite the general `keyPrefix`
+	@param { Array } [options.customConditions] Option to set s3 upload conditions. For details see http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html
 	@param { String } [options.redirectUrlTemplate] Option to overwrite the general `redirectUrlTemplate`
 	@param { Number|Date } [options.policyExpiration] Option to overwrite the general `policyExpiration`
 	
 	@api public
 	###
 	policy: ( filename, options = {}, _predef = {} )=>
-
 		_date = options.now or new Date()
 
 		policy =
@@ -158,7 +169,17 @@ class AwsS3Form extends require( "mpbasic" )()
 			policy.conditions.push { "success_action_status": _predef.success_action_status.toString()}
 		else
 			policy.conditions.push { "success_action_redirect": _predef.success_action_redirect or @_redirectUrl( options.redirectUrlTemplate, filename: filename ) }
-
+		
+		_ctypeCondition = false
+		if options.customConditions?
+			for ccond in options.customConditions
+				policy.conditions.push ccond
+				if ( _.isArray( ccond ) and ccond[ 1 ].toLowerCase() is "$content-type" ) or ( _.isObject( ccond ) and ccond["content-type"]? )
+					_ctypeCondition = true
+		
+		if not _ctypeCondition and _predef?.contentType?
+			policy.conditions.push { "content-type": _predef.contentType }
+			
 		@debug "generated policy", policy
 		if options.uuid?
 			policy.conditions.push { "x-amz-meta-uuid": options.uuid }

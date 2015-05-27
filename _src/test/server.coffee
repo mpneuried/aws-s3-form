@@ -27,6 +27,7 @@ FormGen = new AwsS3Form( _config.s3 )
 app.get '/', (req, res)->
 	_key = req.query.key
 	_statuscode = req.query.statuscode
+	_contenttype = req.query.contenttype
 	console.log _config.s3.keyPrefix, _key
 	if not _key?
 		_key = utils.randomString( 10 )
@@ -35,6 +36,8 @@ app.get '/', (req, res)->
 		_opts.successActionStatus = _statuscode
 	else
 		_opts.redirectUrlTemplate = redirectUrlTemplate
+	if _contenttype?.length
+		_opts.contentType = _contenttype
 	res.render( "index", { q: req.query, example: FormGen.create( _key, _opts ) } )
 	return
 

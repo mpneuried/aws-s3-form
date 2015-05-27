@@ -52,8 +52,8 @@ module.exports = (grunt) ->
 			main:
 				src: [ "test/main.js" ]
 				options:
-					env: 
-						severity_heartbeat: "debug"
+					env:
+						severity_awss3form: "info"
 		
 		
 		docker:

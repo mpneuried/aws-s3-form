@@ -76,7 +76,7 @@ class AwsS3Form extends require( "mpbasic" )()
 		if @config.useUuid
 			options.uuid = uuid.v4()
 
-		_data = 
+		_data =
 			acl: @_acl( options.acl )
 			credential: @_createCredential( options.now )
 			amzdate: @_shortDate( options.now )
@@ -141,7 +141,7 @@ class AwsS3Form extends require( "mpbasic" )()
 
 		_date = options.now or new Date()
 
-		policy = 
+		policy =
 			expiration: @_calcDate( options.policyExpiration or @config.policyExpiration, _date )
 			conditions: [
 				{ "bucket": @config.bucket }
@@ -228,11 +228,11 @@ class AwsS3Form extends require( "mpbasic" )()
 		if not tmpl?
 			return @_handleError( null, "ENOREDIR" )
 		
-		if _.isString( tmpl ) 
+		if _.isString( tmpl )
 			return _.template( tmpl )( data )
 		else if _.isFunction( tmpl )
 			return tmpl( data )
-		else 
+		else
 			return @_handleError( null, "EINVALIDREDIR" )
 
 	###
@@ -287,7 +287,7 @@ class AwsS3Form extends require( "mpbasic" )()
 
 		# use a 10s time space to the past to check the date
 		if ( _now - 10000 ) > _ts
-			return @_handleError( null, "EOLDDATE", val: _now )			
+			return @_handleError( null, "EOLDDATE", val: _now )
 		
 		return ( new Date( _ts + _msAdd ) ).toISOString()
 
@@ -322,7 +322,7 @@ class AwsS3Form extends require( "mpbasic" )()
 	
 	@api private
 	###
-	_shortDate: ( date = new Date(), onlyDate = false )=>
+	_shortDate: ( date = new Date(), onlyDate = false )->
 		_sfull = date.toISOString().replace( /\.[0-9]{1,3}Z/g, "Z" ).replace( /[\.:-]/g, "" )
 		if onlyDate
 			return _sfull.substr( 0, 8 )
@@ -342,7 +342,7 @@ class AwsS3Form extends require( "mpbasic" )()
 	
 	@api private
 	###
-	_hmac: ( secret, val )=>
+	_hmac: ( secret, val )->
 		_hash = crypto.createHmac('SHA256', secret ).update( val )
 		return new Buffer( _hash.digest( "base64" ), "base64" )
 
@@ -359,7 +359,7 @@ class AwsS3Form extends require( "mpbasic" )()
 	
 	@api private
 	###
-	_obj2b64: ( obj )=>
+	_obj2b64: ( obj )->
 		return new Buffer( JSON.stringify( obj ) ).toString('base64')
 
 	ERRORS: =>

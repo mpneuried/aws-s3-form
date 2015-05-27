@@ -47,16 +47,16 @@ describe "----- aws-s3-form TESTS -----", ->
 	describe 'Main Tests', ->
 		
 		_dataA = null
-		_filenameA = null 
+		_filenameA = null
 		_dataB = null
-		_filenameB = null 
+		_filenameB = null
 
 		it "test signing", ( done )->
 			# Example out of http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-post-example.html
 			_testsecret = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 			_region = "us-east-1"
 			_policy = "eyAiZXhwaXJhdGlvbiI6ICIyMDEzLTA4LTA3VDEyOjAwOjAwLjAwMFoiLA0KICAiY29uZGl0aW9ucyI6IFsNCiAgICB7ImJ1Y2tldCI6ICJleGFtcGxlYnVja2V0In0sDQogICAgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgInVzZXIvdXNlcjEvIl0sDQogICAgeyJhY2wiOiAicHVibGljLXJlYWQifSwNCiAgICB7InN1Y2Nlc3NfYWN0aW9uX3JlZGlyZWN0IjogImh0dHA6Ly9leGFtcGxlYnVja2V0LnMzLmFtYXpvbmF3cy5jb20vc3VjY2Vzc2Z1bF91cGxvYWQuaHRtbCJ9LA0KICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICJpbWFnZS8iXSwNCiAgICB7IngtYW16LW1ldGEtdXVpZCI6ICIxNDM2NTEyMzY1MTI3NCJ9LA0KICAgIFsic3RhcnRzLXdpdGgiLCAiJHgtYW16LW1ldGEtdGFnIiwgIiJdLA0KDQogICAgeyJ4LWFtei1jcmVkZW50aWFsIjogIkFLSUFJT1NGT0ROTjdFWEFNUExFLzIwMTMwODA2L3VzLWVhc3QtMS9zMy9hd3M0X3JlcXVlc3QifSwNCiAgICB7IngtYW16LWFsZ29yaXRobSI6ICJBV1M0LUhNQUMtU0hBMjU2In0sDQogICAgeyJ4LWFtei1kYXRlIjogIjIwMTMwODA2VDAwMDAwMFoiIH0NCiAgXQ0KfQ=="
-			_signature = _moduleInst.sign _policy, 
+			_signature = _moduleInst.sign _policy,
 				signdate: "20130806"
 				secretAccessKey: _testsecret
 				region: _region
@@ -67,7 +67,7 @@ describe "----- aws-s3-form TESTS -----", ->
 		# Implement tests cases here
 		it "create data", ( done )->
 			_filenameA = utils.randomString( 10 )
-			_opt = 
+			_opt =
 				redirectUrlTemplate: "https" + redirPre + _filenameA
 				secure: true
 
@@ -86,7 +86,7 @@ describe "----- aws-s3-form TESTS -----", ->
 					filename: testfileName
 					contentType: testfileMime
 			#console.log _dataA
-			request.post { url: _dataA.action, formData: formdata }, ( err, resp, body )=>
+			request.post { url: _dataA.action, formData: formdata }, ( err, resp, body )->
 				#console.log  err, resp, body
 				if err
 					console.log err
@@ -100,7 +100,7 @@ describe "----- aws-s3-form TESTS -----", ->
 							throw err
 
 						console.error( data )
-						throw "AWS ERROR"
+						throw new Error( "AWS ERROR" )
 					return
 
 				if resp.statusCode is 303
@@ -118,7 +118,7 @@ describe "----- aws-s3-form TESTS -----", ->
 
 		it "check if file exists in s3", ( done )->
 			_url = "https://s3.#{ _config.s3.region }.amazonaws.com/#{ _config.s3.bucket }/#{_config.s3.keyPrefix + _filenameA}"
-			request.head _url, ( err, resp, body )=>
+			request.head _url, ( err, resp, body )->
 				if err
 					throw err
 				should.equal( resp.statusCode, 200 )
@@ -129,7 +129,7 @@ describe "----- aws-s3-form TESTS -----", ->
 		# Implement tests cases here
 		it "create data (no ssl)", ( done )->
 			_filenameB = utils.randomString( 10 )
-			_opt = 
+			_opt =
 				redirectUrlTemplate: "http" + redirPre + _filenameB
 				secure: false
 			_dataB = _moduleInst.create( _filenameB, _opt )
@@ -146,7 +146,7 @@ describe "----- aws-s3-form TESTS -----", ->
 					filename: testfileName
 					contentType: testfileMime
 			#console.log _dataB
-			request.post { url: _dataB.action, formData: formdata }, ( err, resp, body )=>
+			request.post { url: _dataB.action, formData: formdata }, ( err, resp, body )->
 				if err
 					console.log err
 					throw err
@@ -159,7 +159,7 @@ describe "----- aws-s3-form TESTS -----", ->
 							throw err
 
 						console.error( data )
-						throw "AWS ERROR"
+						throw new Error( "AWS ERROR" )
 					return
 
 				if resp.statusCode is 303
@@ -177,7 +177,7 @@ describe "----- aws-s3-form TESTS -----", ->
 
 		it "check if file exists in s3 (no ssl)", ( done )->
 			_url = "http://s3.#{ _config.s3.region }.amazonaws.com/#{ _config.s3.bucket }/#{_config.s3.keyPrefix + _filenameB}"
-			request.head _url, ( err, resp, body )=>
+			request.head _url, ( err, resp, body )->
 				if err
 					throw err
 				should.equal( resp.statusCode, 200 )

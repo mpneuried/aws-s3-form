@@ -5,7 +5,7 @@
 # A collection of helper functions
 
 # export the functions
-module.exports = 
+module.exports =
 	###
 	## randomString
 	

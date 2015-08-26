@@ -270,7 +270,6 @@ class AwsS3Form extends require( "mpbasic" )()
 	@api private
 	###
 	_successActionStatus: ( status = @config.successActionStatus )=>
-		console.log status, typeof status, @validation.successActionStatus
 		if status not in @validation.successActionStatus
 			return @_handleError( null, "EINVALIDSTATUS", val: status )
 		return status.toString()

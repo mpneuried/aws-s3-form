@@ -18,7 +18,7 @@ _config.s3.keyPrefix = "test_browser_"
 redirectUrlTemplate = ( data )->
 	_str = "http://#{ server.address().host or "localhost" }:#{server.address().port or 80 }/redir/" 
 	if data.filename is "${filename}"
-		_str += "*" 
+		_str += "*"
 	else
 		_str += _config.s3.keyPrefix + data.filename
 	return _str
@@ -43,7 +43,7 @@ app.get '/', (req, res)->
 
 app.get '/redir/:key', (req, res)->
 	_url = "https://s3.#{ _config.s3.region }.amazonaws.com/#{ _config.s3.bucket }/#{req.query.key}"
-	_data = 
+	_data =
 		q: req.query
 		src: _url
 
@@ -51,6 +51,6 @@ app.get '/redir/:key', (req, res)->
 	return
 
 
-server = app.listen CONFIG.port, ->
+server = app.listen process.env.PORT or CONFIG.port, ->
 	console.log('Now call http://%s:%s/ in your browser', @address().host or "localhost", @address().port)
 	return

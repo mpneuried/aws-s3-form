@@ -57,7 +57,7 @@
 <a class="line-num" href="#line-18" id="line-18">18</a>  <span class="nv">redirectUrlTemplate = </span><span class="nf">( data )-&gt;</span>
 <a class="line-num" href="#line-19" id="line-19">19</a>    <span class="nv">_str = </span><span class="s">&quot;http://</span><span class="si">#{</span> <span class="nx">server</span><span class="p">.</span><span class="nx">address</span><span class="p">().</span><span class="nx">host</span> <span class="o">or</span> <span class="s">&quot;localhost&quot;</span> <span class="si">}</span><span class="s">:</span><span class="si">#{</span><span class="nx">server</span><span class="p">.</span><span class="nx">address</span><span class="p">().</span><span class="nx">port</span> <span class="o">or</span> <span class="mi">80</span> <span class="si">}</span><span class="s">/redir/&quot;</span> 
 <a class="line-num" href="#line-20" id="line-20">20</a>    <span class="k">if</span> <span class="nx">data</span><span class="p">.</span><span class="nx">filename</span> <span class="o">is</span> <span class="s">&quot;${filename}&quot;</span>
-<a class="line-num" href="#line-21" id="line-21">21</a>      <span class="nx">_str</span> <span class="o">+=</span> <span class="s">&quot;*&quot;</span> 
+<a class="line-num" href="#line-21" id="line-21">21</a>      <span class="nx">_str</span> <span class="o">+=</span> <span class="s">&quot;*&quot;</span>
 <a class="line-num" href="#line-22" id="line-22">22</a>    <span class="k">else</span>
 <a class="line-num" href="#line-23" id="line-23">23</a>      <span class="nx">_str</span> <span class="o">+=</span> <span class="nx">_config</span><span class="p">.</span><span class="nx">s3</span><span class="p">.</span><span class="nx">keyPrefix</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">filename</span>
 <a class="line-num" href="#line-24" id="line-24">24</a>    <span class="k">return</span> <span class="nx">_str</span>
@@ -82,7 +82,7 @@
 <a class="line-num" href="#line-43" id="line-43">43</a>  
 <a class="line-num" href="#line-44" id="line-44">44</a>  <span class="nx">app</span><span class="p">.</span><span class="nx">get</span> <span class="s">&#39;/redir/:key&#39;</span><span class="p">,</span> <span class="nf">(req, res)-&gt;</span>
 <a class="line-num" href="#line-45" id="line-45">45</a>    <span class="nv">_url = </span><span class="s">&quot;https://s3.</span><span class="si">#{</span> <span class="nx">_config</span><span class="p">.</span><span class="nx">s3</span><span class="p">.</span><span class="nx">region</span> <span class="si">}</span><span class="s">.amazonaws.com/</span><span class="si">#{</span> <span class="nx">_config</span><span class="p">.</span><span class="nx">s3</span><span class="p">.</span><span class="nx">bucket</span> <span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span>
-<a class="line-num" href="#line-46" id="line-46">46</a>    <span class="nv">_data = </span>
+<a class="line-num" href="#line-46" id="line-46">46</a>    <span class="nv">_data =</span>
 <a class="line-num" href="#line-47" id="line-47">47</a>      <span class="nv">q: </span><span class="nx">req</span><span class="p">.</span><span class="nx">query</span>
 <a class="line-num" href="#line-48" id="line-48">48</a>      <span class="nv">src: </span><span class="nx">_url</span>
 <a class="line-num" href="#line-49" id="line-49">49</a>  
@@ -90,7 +90,7 @@
 <a class="line-num" href="#line-51" id="line-51">51</a>    <span class="k">return</span>
 <a class="line-num" href="#line-52" id="line-52">52</a>  
 <a class="line-num" href="#line-53" id="line-53">53</a>  
-<a class="line-num" href="#line-54" id="line-54">54</a>  <span class="nv">server = </span><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span> <span class="nx">CONFIG</span><span class="p">.</span><span class="nx">port</span><span class="p">,</span> <span class="nf">-&gt;</span>
+<a class="line-num" href="#line-54" id="line-54">54</a>  <span class="nv">server = </span><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">or</span> <span class="nx">CONFIG</span><span class="p">.</span><span class="nx">port</span><span class="p">,</span> <span class="nf">-&gt;</span>
 <a class="line-num" href="#line-55" id="line-55">55</a>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s">&#39;Now call http://%s:%s/ in your browser&#39;</span><span class="p">,</span> <span class="nx">@address</span><span class="p">().</span><span class="nx">host</span> <span class="o">or</span> <span class="s">&quot;localhost&quot;</span><span class="p">,</span> <span class="nx">@address</span><span class="p">().</span><span class="nx">port</span><span class="p">)</span>
 <a class="line-num" href="#line-56" id="line-56">56</a>    <span class="k">return</span>
 <a class="line-num" href="#line-57" id="line-57">57</a>  </pre></div>

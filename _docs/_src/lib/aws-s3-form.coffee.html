@@ -160,7 +160,7 @@
 <a class="line-num" href="#line-24" id="line-24">24</a>  <span class="k">class</span> <span class="nx">AwsS3Form</span> <span class="k">extends</span> <span class="nx">require</span><span class="p">(</span> <span class="s">&quot;mpbasic&quot;</span> <span class="p">)()</span>
 <a class="line-num" href="#line-25" id="line-25">25</a>  
 <a class="line-num" href="#line-26" id="line-26">26</a>    <span class="nv">validation:</span>
-<a class="line-num" href="#line-27" id="line-27">27</a>      <span class="nv">acl: </span><span class="p">[</span> <span class="s">&quot;public-read&quot;</span><span class="p">,</span> <span class="s">&quot;authenticated-read&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-27" id="line-27">27</a>      <span class="nv">acl: </span><span class="p">[</span> <span class="s">&quot;private&quot;</span><span class="p">,</span> <span class="s">&quot;public-read&quot;</span><span class="p">,</span> <span class="s">&quot;public-read-write&quot;</span><span class="p">,</span> <span class="s">&quot;authenticated-read&quot;</span><span class="p">,</span> <span class="s">&quot;bucket-owner-read&quot;</span><span class="p">,</span> <span class="s">&quot;bucket-owner-full-control&quot;</span> <span class="p">]</span>
 <a class="line-num" href="#line-28" id="line-28">28</a>      <span class="nv">successActionStatus: </span><span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">204</span><span class="p">]</span>
 <a class="line-num" href="#line-29" id="line-29">29</a>  
 <a class="line-num" href="#line-30" id="line-30">30</a>  
@@ -583,7 +583,7 @@
 <a class="line-num" href="#line-175" id="line-175">175</a>      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">customConditions</span><span class="o">?</span>
 <a class="line-num" href="#line-176" id="line-176">176</a>        <span class="k">for</span> <span class="nx">ccond</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">customConditions</span>
 <a class="line-num" href="#line-177" id="line-177">177</a>          <span class="nx">policy</span><span class="p">.</span><span class="nx">conditions</span><span class="p">.</span><span class="nx">push</span> <span class="nx">ccond</span>
-<a class="line-num" href="#line-178" id="line-178">178</a>          <span class="k">if</span> <span class="p">(</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">ccond</span> <span class="p">)</span> <span class="o">and</span> <span class="nx">ccond</span><span class="p">[</span> <span class="mi">1</span> <span class="p">].</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">is</span> <span class="s">&quot;$content-type&quot;</span> <span class="p">)</span> <span class="o">or</span> <span class="p">(</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span> <span class="nx">ccond</span> <span class="p">)</span> <span class="o">and</span> <span class="nx">ccond</span><span class="p">[</span><span class="s">&quot;content-type&quot;</span><span class="p">]</span><span class="o">?</span> <span class="p">)</span>
+<a class="line-num" href="#line-178" id="line-178">178</a>          <span class="k">if</span> <span class="p">(</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span> <span class="nx">ccond</span> <span class="p">)</span> <span class="o">and</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span> <span class="nx">ccond</span><span class="p">[</span> <span class="mi">1</span> <span class="p">]</span> <span class="p">)</span> <span class="o">and</span> <span class="nx">ccond</span><span class="p">[</span> <span class="mi">1</span> <span class="p">].</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">is</span> <span class="s">&quot;$content-type&quot;</span> <span class="p">)</span> <span class="o">or</span> <span class="p">(</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span> <span class="nx">ccond</span> <span class="p">)</span> <span class="o">and</span> <span class="nx">ccond</span><span class="p">[</span><span class="s">&quot;content-type&quot;</span><span class="p">]</span><span class="o">?</span> <span class="p">)</span>
 <a class="line-num" href="#line-179" id="line-179">179</a>            <span class="nv">_ctypeCondition = </span><span class="kc">true</span>
 <a class="line-num" href="#line-180" id="line-180">180</a>      
 <a class="line-num" href="#line-181" id="line-181">181</a>      <span class="k">if</span> <span class="o">not</span> <span class="nx">_ctypeCondition</span> <span class="o">and</span> <span class="nx">_predef</span><span class="o">?</span><span class="p">.</span><span class="nx">contentType</span><span class="o">?</span>
@@ -812,13 +812,12 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-272" id="line-272">272</a>  
 <a class="line-num" href="#line-273" id="line-273">273</a>    <span class="nv">_successActionStatus: </span><span class="nf">( status = @config.successActionStatus )=&gt;</span>
-<a class="line-num" href="#line-274" id="line-274">274</a>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">status</span><span class="p">,</span> <span class="k">typeof</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">@validation</span><span class="p">.</span><span class="nx">successActionStatus</span>
-<a class="line-num" href="#line-275" id="line-275">275</a>      <span class="k">if</span> <span class="nx">status</span> <span class="o">not</span> <span class="k">in</span> <span class="nx">@validation</span><span class="p">.</span><span class="nx">successActionStatus</span>
-<a class="line-num" href="#line-276" id="line-276">276</a>        <span class="k">return</span> <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;EINVALIDSTATUS&quot;</span><span class="p">,</span> <span class="nv">val: </span><span class="nx">status</span> <span class="p">)</span>
-<a class="line-num" href="#line-277" id="line-277">277</a>      <span class="k">return</span> <span class="nx">status</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+<a class="line-num" href="#line-274" id="line-274">274</a>      <span class="k">if</span> <span class="nx">status</span> <span class="o">not</span> <span class="k">in</span> <span class="nx">@validation</span><span class="p">.</span><span class="nx">successActionStatus</span>
+<a class="line-num" href="#line-275" id="line-275">275</a>        <span class="k">return</span> <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;EINVALIDSTATUS&quot;</span><span class="p">,</span> <span class="nv">val: </span><span class="nx">status</span> <span class="p">)</span>
+<a class="line-num" href="#line-276" id="line-276">276</a>      <span class="k">return</span> <span class="nx">status</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+<a class="line-num" href="#line-277" id="line-277">277</a>  
 <a class="line-num" href="#line-278" id="line-278">278</a>  
-<a class="line-num" href="#line-279" id="line-279">279</a>  
-<a class="line-num" href="#line-280" id="line-280">280</a>  </pre></div>
+<a class="line-num" href="#line-279" id="line-279">279</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -863,26 +862,26 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-292" id="line-292">292</a>  
-<a class="line-num" href="#line-293" id="line-293">293</a>    <span class="nv">_calcDate: </span><span class="p">(</span> <span class="nx">addSec</span><span class="p">,</span> <span class="nv">date = </span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="p">)</span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-294" id="line-294">294</a>      <span class="nv">_msAdd = </span><span class="mi">0</span>
-<a class="line-num" href="#line-295" id="line-295">295</a>      <span class="nv">_now = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
-<a class="line-num" href="#line-296" id="line-296">296</a>      
-<a class="line-num" href="#line-297" id="line-297">297</a>      <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span> <span class="nx">addSec</span> <span class="p">)</span>
-<a class="line-num" href="#line-298" id="line-298">298</a>        <span class="nv">_msAdd = </span><span class="nx">addSec</span> <span class="o">*</span> <span class="mi">1000</span>
-<a class="line-num" href="#line-299" id="line-299">299</a>        <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span> <span class="nx">date</span> <span class="p">)</span>
-<a class="line-num" href="#line-300" id="line-300">300</a>          <span class="nv">_ts = </span><span class="nx">date</span><span class="p">.</span><span class="nx">valueOf</span><span class="p">()</span>
-<a class="line-num" href="#line-301" id="line-301">301</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span> <span class="nx">date</span> <span class="p">)</span>
-<a class="line-num" href="#line-302" id="line-302">302</a>          <span class="nv">_ts = </span><span class="nx">date</span>
-<a class="line-num" href="#line-303" id="line-303">303</a>        <span class="k">else</span>
-<a class="line-num" href="#line-304" id="line-304">304</a>          <span class="k">return</span> <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;ENOTDATE&quot;</span><span class="p">,</span> <span class="nv">val: </span><span class="nx">date</span> <span class="p">)</span>
-<a class="line-num" href="#line-305" id="line-305">305</a>      <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span> <span class="nx">addSec</span> <span class="p">)</span>
-<a class="line-num" href="#line-306" id="line-306">306</a>        <span class="nv">_ts = </span><span class="nx">addSec</span><span class="p">.</span><span class="nx">valueOf</span><span class="p">()</span>
-<a class="line-num" href="#line-307" id="line-307">307</a>      <span class="k">else</span>
-<a class="line-num" href="#line-308" id="line-308">308</a>        <span class="k">return</span> <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;ENOTDATE&quot;</span><span class="p">,</span> <span class="nv">val: </span><span class="nx">addSec</span> <span class="p">)</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-291" id="line-291">291</a>  
+<a class="line-num" href="#line-292" id="line-292">292</a>    <span class="nv">_calcDate: </span><span class="p">(</span> <span class="nx">addSec</span><span class="p">,</span> <span class="nv">date = </span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="p">)</span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-293" id="line-293">293</a>      <span class="nv">_msAdd = </span><span class="mi">0</span>
+<a class="line-num" href="#line-294" id="line-294">294</a>      <span class="nv">_now = </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span>
+<a class="line-num" href="#line-295" id="line-295">295</a>      
+<a class="line-num" href="#line-296" id="line-296">296</a>      <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span> <span class="nx">addSec</span> <span class="p">)</span>
+<a class="line-num" href="#line-297" id="line-297">297</a>        <span class="nv">_msAdd = </span><span class="nx">addSec</span> <span class="o">*</span> <span class="mi">1000</span>
+<a class="line-num" href="#line-298" id="line-298">298</a>        <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span> <span class="nx">date</span> <span class="p">)</span>
+<a class="line-num" href="#line-299" id="line-299">299</a>          <span class="nv">_ts = </span><span class="nx">date</span><span class="p">.</span><span class="nx">valueOf</span><span class="p">()</span>
+<a class="line-num" href="#line-300" id="line-300">300</a>        <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span> <span class="nx">date</span> <span class="p">)</span>
+<a class="line-num" href="#line-301" id="line-301">301</a>          <span class="nv">_ts = </span><span class="nx">date</span>
+<a class="line-num" href="#line-302" id="line-302">302</a>        <span class="k">else</span>
+<a class="line-num" href="#line-303" id="line-303">303</a>          <span class="k">return</span> <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;ENOTDATE&quot;</span><span class="p">,</span> <span class="nv">val: </span><span class="nx">date</span> <span class="p">)</span>
+<a class="line-num" href="#line-304" id="line-304">304</a>      <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span> <span class="nx">addSec</span> <span class="p">)</span>
+<a class="line-num" href="#line-305" id="line-305">305</a>        <span class="nv">_ts = </span><span class="nx">addSec</span><span class="p">.</span><span class="nx">valueOf</span><span class="p">()</span>
+<a class="line-num" href="#line-306" id="line-306">306</a>      <span class="k">else</span>
+<a class="line-num" href="#line-307" id="line-307">307</a>        <span class="k">return</span> <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;ENOTDATE&quot;</span><span class="p">,</span> <span class="nv">val: </span><span class="nx">addSec</span> <span class="p">)</span>
+<a class="line-num" href="#line-308" id="line-308">308</a>  
 <a class="line-num" href="#line-309" id="line-309">309</a>  
-<a class="line-num" href="#line-310" id="line-310">310</a>  
-<a class="line-num" href="#line-311" id="line-311">311</a>  </pre></div>
+<a class="line-num" href="#line-310" id="line-310">310</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -892,14 +891,14 @@
 </div>
 <p>use a 10s time space to the past to check the date</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-310" id="line-310">310</a>  
-<a class="line-num" href="#line-311" id="line-311">311</a>      <span class="k">if</span> <span class="p">(</span> <span class="nx">_now</span> <span class="o">-</span> <span class="mi">10000</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="nx">_ts</span>
-<a class="line-num" href="#line-312" id="line-312">312</a>        <span class="k">return</span> <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;EOLDDATE&quot;</span><span class="p">,</span> <span class="nv">val: </span><span class="nx">_now</span> <span class="p">)</span>
-<a class="line-num" href="#line-313" id="line-313">313</a>      
-<a class="line-num" href="#line-314" id="line-314">314</a>      <span class="k">return</span> <span class="p">(</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span> <span class="nx">_ts</span> <span class="o">+</span> <span class="nx">_msAdd</span> <span class="p">)</span> <span class="p">).</span><span class="nx">toISOString</span><span class="p">()</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-309" id="line-309">309</a>  
+<a class="line-num" href="#line-310" id="line-310">310</a>      <span class="k">if</span> <span class="p">(</span> <span class="nx">_now</span> <span class="o">-</span> <span class="mi">10000</span> <span class="p">)</span> <span class="o">&gt;</span> <span class="nx">_ts</span>
+<a class="line-num" href="#line-311" id="line-311">311</a>        <span class="k">return</span> <span class="nx">@_handleError</span><span class="p">(</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;EOLDDATE&quot;</span><span class="p">,</span> <span class="nv">val: </span><span class="nx">_now</span> <span class="p">)</span>
+<a class="line-num" href="#line-312" id="line-312">312</a>      
+<a class="line-num" href="#line-313" id="line-313">313</a>      <span class="k">return</span> <span class="p">(</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span> <span class="nx">_ts</span> <span class="o">+</span> <span class="nx">_msAdd</span> <span class="p">)</span> <span class="p">).</span><span class="nx">toISOString</span><span class="p">()</span>
+<a class="line-num" href="#line-314" id="line-314">314</a>  
 <a class="line-num" href="#line-315" id="line-315">315</a>  
-<a class="line-num" href="#line-316" id="line-316">316</a>  
-<a class="line-num" href="#line-317" id="line-317">317</a>  </pre></div>
+<a class="line-num" href="#line-316" id="line-316">316</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -938,13 +937,13 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-328" id="line-328">328</a>  
-<a class="line-num" href="#line-329" id="line-329">329</a>    <span class="nv">_createCredential: </span><span class="nf">( date )=&gt;</span>
-<a class="line-num" href="#line-330" id="line-330">330</a>      <span class="nv">shortDate = </span><span class="nx">@_shortDate</span><span class="p">(</span> <span class="nx">date</span><span class="p">,</span> <span class="kc">true</span> <span class="p">)</span>
-<a class="line-num" href="#line-331" id="line-331">331</a>      <span class="k">return</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">accessKeyId</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">shortDate</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">region</span><span class="si">}</span><span class="s">/s3/aws4_request&quot;</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-327" id="line-327">327</a>  
+<a class="line-num" href="#line-328" id="line-328">328</a>    <span class="nv">_createCredential: </span><span class="nf">( date )=&gt;</span>
+<a class="line-num" href="#line-329" id="line-329">329</a>      <span class="nv">shortDate = </span><span class="nx">@_shortDate</span><span class="p">(</span> <span class="nx">date</span><span class="p">,</span> <span class="kc">true</span> <span class="p">)</span>
+<a class="line-num" href="#line-330" id="line-330">330</a>      <span class="k">return</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">accessKeyId</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">shortDate</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">@config</span><span class="p">.</span><span class="nx">region</span><span class="si">}</span><span class="s">/s3/aws4_request&quot;</span>
+<a class="line-num" href="#line-331" id="line-331">331</a>  
 <a class="line-num" href="#line-332" id="line-332">332</a>  
-<a class="line-num" href="#line-333" id="line-333">333</a>  
-<a class="line-num" href="#line-334" id="line-334">334</a>  </pre></div>
+<a class="line-num" href="#line-333" id="line-333">333</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -988,15 +987,15 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-346" id="line-346">346</a>  
-<a class="line-num" href="#line-347" id="line-347">347</a>    <span class="nv">_shortDate: </span><span class="p">(</span> <span class="nv">date = </span><span class="k">new</span> <span class="nb">Date</span><span class="p">(),</span> <span class="nv">onlyDate = </span><span class="kc">false</span> <span class="p">)</span><span class="nf">-&gt;</span>
-<a class="line-num" href="#line-348" id="line-348">348</a>      <span class="nv">_sfull = </span><span class="nx">date</span><span class="p">.</span><span class="nx">toISOString</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span> <span class="sr">/\.[0-9]{1,3}Z/g</span><span class="p">,</span> <span class="s">&quot;Z&quot;</span> <span class="p">).</span><span class="nx">replace</span><span class="p">(</span> <span class="sr">/[\.:-]/g</span><span class="p">,</span> <span class="s">&quot;&quot;</span> <span class="p">)</span>
-<a class="line-num" href="#line-349" id="line-349">349</a>      <span class="k">if</span> <span class="nx">onlyDate</span>
-<a class="line-num" href="#line-350" id="line-350">350</a>        <span class="k">return</span> <span class="nx">_sfull</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span> <span class="p">)</span>
-<a class="line-num" href="#line-351" id="line-351">351</a>      <span class="k">return</span> <span class="nx">_sfull</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-345" id="line-345">345</a>  
+<a class="line-num" href="#line-346" id="line-346">346</a>    <span class="nv">_shortDate: </span><span class="p">(</span> <span class="nv">date = </span><span class="k">new</span> <span class="nb">Date</span><span class="p">(),</span> <span class="nv">onlyDate = </span><span class="kc">false</span> <span class="p">)</span><span class="nf">-&gt;</span>
+<a class="line-num" href="#line-347" id="line-347">347</a>      <span class="nv">_sfull = </span><span class="nx">date</span><span class="p">.</span><span class="nx">toISOString</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span> <span class="sr">/\.[0-9]{1,3}Z/g</span><span class="p">,</span> <span class="s">&quot;Z&quot;</span> <span class="p">).</span><span class="nx">replace</span><span class="p">(</span> <span class="sr">/[\.:-]/g</span><span class="p">,</span> <span class="s">&quot;&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-348" id="line-348">348</a>      <span class="k">if</span> <span class="nx">onlyDate</span>
+<a class="line-num" href="#line-349" id="line-349">349</a>        <span class="k">return</span> <span class="nx">_sfull</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span> <span class="p">)</span>
+<a class="line-num" href="#line-350" id="line-350">350</a>      <span class="k">return</span> <span class="nx">_sfull</span>
+<a class="line-num" href="#line-351" id="line-351">351</a>  
 <a class="line-num" href="#line-352" id="line-352">352</a>  
-<a class="line-num" href="#line-353" id="line-353">353</a>  
-<a class="line-num" href="#line-354" id="line-354">354</a>  </pre></div>
+<a class="line-num" href="#line-353" id="line-353">353</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1040,13 +1039,13 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-366" id="line-366">366</a>  
-<a class="line-num" href="#line-367" id="line-367">367</a>    <span class="nv">_hmac: </span><span class="nf">( secret, val )-&gt;</span>
-<a class="line-num" href="#line-368" id="line-368">368</a>      <span class="nv">_hash = </span><span class="nx">crypto</span><span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="s">&#39;SHA256&#39;</span><span class="p">,</span> <span class="nx">secret</span> <span class="p">).</span><span class="nx">update</span><span class="p">(</span> <span class="nx">val</span> <span class="p">)</span>
-<a class="line-num" href="#line-369" id="line-369">369</a>      <span class="k">return</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span> <span class="nx">_hash</span><span class="p">.</span><span class="nx">digest</span><span class="p">(</span> <span class="s">&quot;base64&quot;</span> <span class="p">),</span> <span class="s">&quot;base64&quot;</span> <span class="p">)</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-365" id="line-365">365</a>  
+<a class="line-num" href="#line-366" id="line-366">366</a>    <span class="nv">_hmac: </span><span class="nf">( secret, val )-&gt;</span>
+<a class="line-num" href="#line-367" id="line-367">367</a>      <span class="nv">_hash = </span><span class="nx">crypto</span><span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="s">&#39;SHA256&#39;</span><span class="p">,</span> <span class="nx">secret</span> <span class="p">).</span><span class="nx">update</span><span class="p">(</span> <span class="nx">val</span> <span class="p">)</span>
+<a class="line-num" href="#line-368" id="line-368">368</a>      <span class="k">return</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span> <span class="nx">_hash</span><span class="p">.</span><span class="nx">digest</span><span class="p">(</span> <span class="s">&quot;base64&quot;</span> <span class="p">),</span> <span class="s">&quot;base64&quot;</span> <span class="p">)</span>
+<a class="line-num" href="#line-369" id="line-369">369</a>  
 <a class="line-num" href="#line-370" id="line-370">370</a>  
-<a class="line-num" href="#line-371" id="line-371">371</a>  
-<a class="line-num" href="#line-372" id="line-372">372</a>  </pre></div>
+<a class="line-num" href="#line-371" id="line-371">371</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1085,21 +1084,21 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-383" id="line-383">383</a>  
-<a class="line-num" href="#line-384" id="line-384">384</a>    <span class="nv">_obj2b64: </span><span class="nf">( obj )-&gt;</span>
-<a class="line-num" href="#line-385" id="line-385">385</a>      <span class="k">return</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span> <span class="nx">obj</span> <span class="p">)</span> <span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="s">&#39;base64&#39;</span><span class="p">)</span>
-<a class="line-num" href="#line-386" id="line-386">386</a>  
-<a class="line-num" href="#line-387" id="line-387">387</a>    <span class="nv">ERRORS: </span><span class="o">=&gt;</span>
-<a class="line-num" href="#line-388" id="line-388">388</a>      <span class="s">&quot;ENOTDATE&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;Invalid date `&lt;%= val %&gt;`. Please use a valid date object or number as timestamp&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-389" id="line-389">389</a>      <span class="s">&quot;EOLDDATE&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;Date `&lt;%= val %&gt;` to old. Only dates in the future are allowed&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-390" id="line-390">390</a>      <span class="s">&quot;EINVALIDACL&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;The given acl `&lt;%= val %&gt;` is not valid. Only `</span><span class="si">#{</span><span class="nx">@validation</span><span class="p">.</span><span class="nx">acl</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;`, `&#39;</span><span class="p">)</span><span class="si">}</span><span class="s">` is allowed.&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-391" id="line-391">391</a>      <span class="s">&quot;EINVALIDSTATUS&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;The given successActionStatus `&lt;%= val %&gt;` is not valid. Only `</span><span class="si">#{</span><span class="nx">@validation</span><span class="p">.</span><span class="nx">successActionStatus</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;`, `&#39;</span><span class="p">)</span><span class="si">}</span><span class="s">` is allowed.&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-392" id="line-392">392</a>      <span class="s">&quot;ENOREDIR&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;You have to define a `redirectUrlTemplate` as config or `.create()` option.&quot;</span> <span class="p">]</span>
-<a class="line-num" href="#line-393" id="line-393">393</a>      <span class="s">&quot;EINVALIDREDIR&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;Only a string or function is valid as redirect url.&quot;</span> <span class="p">]</span>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-382" id="line-382">382</a>  
+<a class="line-num" href="#line-383" id="line-383">383</a>    <span class="nv">_obj2b64: </span><span class="nf">( obj )-&gt;</span>
+<a class="line-num" href="#line-384" id="line-384">384</a>      <span class="k">return</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span> <span class="nx">obj</span> <span class="p">)</span> <span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="s">&#39;base64&#39;</span><span class="p">)</span>
+<a class="line-num" href="#line-385" id="line-385">385</a>  
+<a class="line-num" href="#line-386" id="line-386">386</a>    <span class="nv">ERRORS: </span><span class="o">=&gt;</span>
+<a class="line-num" href="#line-387" id="line-387">387</a>      <span class="s">&quot;ENOTDATE&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;Invalid date `&lt;%= val %&gt;`. Please use a valid date object or number as timestamp&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-388" id="line-388">388</a>      <span class="s">&quot;EOLDDATE&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;Date `&lt;%= val %&gt;` to old. Only dates in the future are allowed&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-389" id="line-389">389</a>      <span class="s">&quot;EINVALIDACL&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;The given acl `&lt;%= val %&gt;` is not valid. Only `</span><span class="si">#{</span><span class="nx">@validation</span><span class="p">.</span><span class="nx">acl</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;`, `&#39;</span><span class="p">)</span><span class="si">}</span><span class="s">` is allowed.&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-390" id="line-390">390</a>      <span class="s">&quot;EINVALIDSTATUS&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;The given successActionStatus `&lt;%= val %&gt;` is not valid. Only `</span><span class="si">#{</span><span class="nx">@validation</span><span class="p">.</span><span class="nx">successActionStatus</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;`, `&#39;</span><span class="p">)</span><span class="si">}</span><span class="s">` is allowed.&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-391" id="line-391">391</a>      <span class="s">&quot;ENOREDIR&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;You have to define a `redirectUrlTemplate` as config or `.create()` option.&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-392" id="line-392">392</a>      <span class="s">&quot;EINVALIDREDIR&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="s">&quot;Only a string or function is valid as redirect url.&quot;</span> <span class="p">]</span>
+<a class="line-num" href="#line-393" id="line-393">393</a>  
 <a class="line-num" href="#line-394" id="line-394">394</a>  
 <a class="line-num" href="#line-395" id="line-395">395</a>  
-<a class="line-num" href="#line-396" id="line-396">396</a>  
-<a class="line-num" href="#line-397" id="line-397">397</a>  </pre></div>
+<a class="line-num" href="#line-396" id="line-396">396</a>  </pre></div>
         </td>
       </tr>
       <tr>
@@ -1109,9 +1108,9 @@
 </div>
 <p>export this class</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-396" id="line-396">396</a>  
-<a class="line-num" href="#line-397" id="line-397">397</a>  <span class="nv">module.exports = </span><span class="nx">AwsS3Form</span>
-<a class="line-num" href="#line-398" id="line-398">398</a>  </pre></div>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-395" id="line-395">395</a>  
+<a class="line-num" href="#line-396" id="line-396">396</a>  <span class="nv">module.exports = </span><span class="nx">AwsS3Form</span>
+<a class="line-num" href="#line-397" id="line-397">397</a>  </pre></div>
         </td>
       </tr>
   </tbody>

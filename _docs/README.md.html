@@ -172,7 +172,7 @@
 <li><strong>successActionStatus</strong> <em>( <code>String|Number</code> optional: default = <code>204</code> )</em> HTTP code to return when no redirectUrlTemplate is defined.</li>
 <li><strong>policyExpiration</strong> <em>( <code>Date|Number</code> optional: default = <code>43200</code> )</em> Add time in seconds to now to define the expiration of the policy. Or set a hard Date <em>( <code>43200</code> = 12 hours )</em>.</li>
 <li><strong>keyPrefix</strong> <em>( <code>String</code> optional: default = `` )</em> Key prefix to define a policy that the key has to start with this value</li>
-<li><strong>acl</strong> <em>( <code>String</code> optional: default = <code>public-read</code> )</em> The standard acl type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
+<li><strong>acl</strong> <em>( <code>String</code> optional: default = <code>public-read</code> )</em> The standard acl type. Only <code>private</code>, <code>public-read</code>, <code>public-read-write</code>, <code>authenticated-read</code>, <code>bucket-owner-read</code> and <code>bucket-owner-full-control</code> are allowed</li>
 <li><strong>useUuid</strong> <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Use a uuid for better security</li>
 </ul>
 
@@ -212,7 +212,7 @@
 <ul>
 <li><code>filename</code> : <em>( <code>String</code> required )</em>: The S3 file key/filename to use.</li>
 <li><code>options</code> : <em>( <code>Object</code> optional )</em>: Options to change the configured behavior</li>
-<li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
+<li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>private</code>, <code>public-read</code>, <code>public-read-write</code>, <code>authenticated-read</code>, <code>bucket-owner-read</code> and <code>bucket-owner-full-control</code> are allowed</li>
 <li><code>options.keyPrefix</code> : <em>( <code>String</code> optional; default = <code>config.keyPrefix</code> )</em>: Change the configured standard <code>keyPrefix</code> type. Details see config object description.</li>
 <li><code>options.contentType</code> : <em>( <code>String|Boolean</code> optional; )</em>:  Option to set the content type of the uploaded file. This could be a string with a fixed mime or a boolean to decide if the mime will be guessed by the filename.</li>
 <li><code>options.customConditions</code> : <em>( <code>Array</code> optional; )</em>: Option to set s3 upload conditions. For details see <a href='http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html'>http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html</a></li>
@@ -246,7 +246,7 @@
 <li><code>options</code> : <em>( <code>Object</code> optional )</em>: Options to change the configured behavior</li>
 <li><code>options.now</code> : <em>( <code>Date</code> optional; default = <code>new Date()</code> )</em>: The current date-time for this policy</li>
 <li><code>options.uuid</code> : <em>( <code>String</code> optional;)</em>: The uuid to add to the policy</li>
-<li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>public-read</code> and <code>authenticated-read</code> are allowed</li>
+<li><code>options.acl</code> : <em>( <code>String</code> optional; default = <code>config.acl</code> )</em>: Change the configured standard <code>acl</code> type. Only <code>private</code>, <code>public-read</code>, <code>public-read-write</code>, <code>authenticated-read</code>, <code>bucket-owner-read</code> and <code>bucket-owner-full-control</code> are allowed</li>
 <li><code>options.keyPrefix</code> : <em>( <code>String</code> optional; default = <code>config.keyPrefix</code> )</em>: Change the configured standard <code>keyPrefix</code> type. Details see config object description.</li>
 <li><code>options.customConditions</code> : <em>( <code>Array</code> optional; )</em>: Option to set s3 upload conditions. For details see <a href='http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html'>http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html</a></li>
 <li><code>options.redirectUrlTemplate</code> : <em>( <code>String</code> optional; default = <code>config.redirectUrlTemplate</code> )</em>: Change the configured standard <code>redirectUrlTemplate</code> type. Details see config object description.</li>
@@ -400,6 +400,7 @@ Then you are able to run <code>grunt test</code> or start the express example in
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.1|2015-08-26|Added all possible acl options (thanks to <a href="https://github.com/retorquere">retorquere</a> for this hint);|
 |0.3.0|2015-05-27|Added <code>contentType</code> to options and optional <code>customConditions</code> to define a custom aws-s3 policy |
 |0.2.0|2015-04-07|Added option <code>successActionStatus</code> to make ajax form posts possible|
 |0.1.4|2015-03-17|Added option <code>secure</code> to create method|

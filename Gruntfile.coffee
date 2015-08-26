@@ -93,4 +93,4 @@ module.exports = (grunt) ->
 
 	# build the project
 	grunt.registerTask "build", [ "clear", "coffee:base", "includereplace" ]
-	grunt.registerTask "build-dev", [ "clear", "coffee:base", "docs", "test" ]
+	grunt.registerTask "build-dev", [ "build", "docs", "test" ]

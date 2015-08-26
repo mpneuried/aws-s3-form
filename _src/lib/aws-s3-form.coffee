@@ -23,7 +23,7 @@ utils = require( "./utils" )
 class AwsS3Form extends require( "mpbasic" )()
 
 	validation:
-		acl: [ "public-read", "authenticated-read" ]
+		acl: [ "private", "public-read", "public-read-write", "authenticated-read", "bucket-owner-read", "bucket-owner-full-control" ]
 		successActionStatus: [200, 201, 204]
 
 	# ## defaults

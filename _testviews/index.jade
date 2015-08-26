@@ -25,8 +25,9 @@ html
 						.form-group
 							label( for="acl" ) Acl: 
 							select.form-control#acl( name="acl" type="select" )
-								option( selected= q.acl == "public-read" ) public-read
-								option( selected= q.acl == "authenticated-read" ) authenticated-read 
+								each opt in [ "private", "public-read", "public-read-write", "authenticated-read", "bucket-owner-read", "bucket-owner-full-control" ]
+									option( selected= q.acl == opt )= opt
+								
 					.col-sm-3
 						.form-group
 							label( for="contenttype" ) Set file mime type: 

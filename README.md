@@ -194,7 +194,7 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.3.1|2015-08-26|Added all possible acl options (thanks to [retorquere](https://github.com/retorquere) for this hint);|
+|0.3.1|2015-08-26|Added all possible acl options and fixed numeric custom conditions (thanks to [retorquere](https://github.com/retorquere));|
 |0.3.0|2015-05-27|Added `contentType` to options and optional `customConditions` to define a custom aws-s3 policy |
 |0.2.0|2015-04-07|Added option `successActionStatus` to make ajax form posts possible|
 |0.1.4|2015-03-17|Added option `secure` to create method|

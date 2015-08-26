@@ -38,6 +38,7 @@ describe "----- aws-s3-form TESTS -----", ->
 		testfileStreamD = fs.createReadStream(_config.mocha.file)
 		testfileStreamE = fs.createReadStream(_config.mocha.file)
 		testfileStreamF = fs.createReadStream(_config.mocha.file)
+		testfileStreamG = fs.createReadStream(_config.mocha.file)
 		testfileName = path.basename( _config.mocha.file )
 		testfileMime = mime.lookup( _config.mocha.file )
 
@@ -68,6 +69,8 @@ describe "----- aws-s3-form TESTS -----", ->
 		_filenameE = null
 		_dataF = null
 		_filenameF = null
+		_dataG = null
+		_filenameG = null
 		
 		describe 'Signing', ->
 			it "test signing", ( done )->
@@ -459,7 +462,22 @@ describe "----- aws-s3-form TESTS -----", ->
 					done()
 					return
 				return
+		
 			return
+		
+		describe 'Custom condition', ->
+			it "create data with numeric custom max length condtion", ( done )->
+				_filenameG = utils.randomString( 10 ) + "." + mime.extension(testfileMime)
 				
+				_opt =
+					contentType: 'contentType'
+					customConditions: [
+					  ['content-length-range', 0, 1048576],
+					]
+				_dataG = _moduleInst.create( _filenameF, _opt )
+				done()
+				return
+			
+			return
 		return
 	return

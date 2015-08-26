@@ -174,7 +174,7 @@ class AwsS3Form extends require( "mpbasic" )()
 		if options.customConditions?
 			for ccond in options.customConditions
 				policy.conditions.push ccond
-				if ( _.isArray( ccond ) and ccond[ 1 ].toLowerCase() is "$content-type" ) or ( _.isObject( ccond ) and ccond["content-type"]? )
+				if ( _.isArray( ccond ) and _.isString( ccond[ 1 ] ) and ccond[ 1 ].toLowerCase() is "$content-type" ) or ( _.isObject( ccond ) and ccond["content-type"]? )
 					_ctypeCondition = true
 		
 		if not _ctypeCondition and _predef?.contentType?

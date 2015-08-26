@@ -65,7 +65,7 @@ formdata = formGen.create( "my-s3-filename-or-key" )
 - **successActionStatus** *( `String|Number` optional: default = `204` )* HTTP code to return when no redirectUrlTemplate is defined.
 - **policyExpiration** *( `Date|Number` optional: default = `43200` )* Add time in seconds to now to define the expiration of the policy. Or set a hard Date *( `43200` = 12 hours )*.
 - **keyPrefix** *( `String` optional: default = `` )* Key prefix to define a policy that the key has to start with this value
-- **acl** *( `String` optional: default = `public-read` )* The standard acl type. Only `public-read` and `authenticated-read` are allowed
+- **acl** *( `String` optional: default = `public-read` )* The standard acl type. Only `private`, `public-read`, `public-read-write`, `authenticated-read`, `bucket-owner-read` and `bucket-owner-full-control` are allowed
 - **useUuid** *( `Boolean` optional: default = `true` )* Use a uuid for better security
 
 ### Security Warning!
@@ -82,7 +82,7 @@ Create new signed and ready to use formdata.
 
 * `filename` : *( `String` required )*: The S3 file key/filename to use.
 * `options` : *( `Object` optional )*: Options to change the configured behavior
-* `options.acl` : *( `String` optional; default = `config.acl` )*: Change the configured standard `acl` type. Only `public-read` and `authenticated-read` are allowed
+* `options.acl` : *( `String` optional; default = `config.acl` )*: Change the configured standard `acl` type. Only `private`, `public-read`, `public-read-write`, `authenticated-read`, `bucket-owner-read` and `bucket-owner-full-control` are allowed
 * `options.keyPrefix` : *( `String` optional; default = `config.keyPrefix` )*: Change the configured standard `keyPrefix` type. Details see config object description.
 * `options.contentType` : *( `String|Boolean` optional; )*:  Option to set the content type of the uploaded file. This could be a string with a fixed mime or a boolean to decide if the mime will be guessed by the filename.
 * `options.customConditions` : *( `Array` optional; )*: Option to set s3 upload conditions. For details see http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html
@@ -107,7 +107,7 @@ Create a new AWS S3 policy object based on AWS Signature Version 4.
 * `options` : *( `Object` optional )*: Options to change the configured behavior
 * `options.now` : *( `Date` optional; default = `new Date()` )*: The current date-time for this policy
 * `options.uuid` : *( `String` optional;)*: The uuid to add to the policy
-* `options.acl` : *( `String` optional; default = `config.acl` )*: Change the configured standard `acl` type. Only `public-read` and `authenticated-read` are allowed
+* `options.acl` : *( `String` optional; default = `config.acl` )*: Change the configured standard `acl` type. Only `private`, `public-read`, `public-read-write`, `authenticated-read`, `bucket-owner-read` and `bucket-owner-full-control` are allowed
 * `options.keyPrefix` : *( `String` optional; default = `config.keyPrefix` )*: Change the configured standard `keyPrefix` type. Details see config object description.
 * `options.customConditions` : *( `Array` optional; )*: Option to set s3 upload conditions. For details see http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html
 * `options.redirectUrlTemplate` : *( `String` optional; default = `config.redirectUrlTemplate` )*: Change the configured standard `redirectUrlTemplate` type. Details see config object description.
@@ -194,6 +194,7 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.1|2015-08-26|Added all possible acl options (thanks to [retorquere](https://github.com/retorquere) for this hint);|
 |0.3.0|2015-05-27|Added `contentType` to options and optional `customConditions` to define a custom aws-s3 policy |
 |0.2.0|2015-04-07|Added option `successActionStatus` to make ajax form posts possible|
 |0.1.4|2015-03-17|Added option `secure` to create method|

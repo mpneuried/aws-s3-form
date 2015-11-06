@@ -14,7 +14,7 @@ crypto = require( "crypto" )
 # **npm modules**
 _ = require('lodash')
 uuid = require('node-uuid')
-mime = require('mime')
+mime = require('mime-nofs')
 
 # **internal modules**
 # [Utils](./utils.coffee.html)

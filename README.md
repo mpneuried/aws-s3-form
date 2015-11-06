@@ -194,6 +194,7 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.2|2015-11-06|Moved from `mime` to `mime-nofs` to use this module inside external modules like react-native or within the browser (thanks to [retorquere](https://github.com/retorquere))|
 |0.3.1|2015-08-26|Added all possible acl options and fixed numeric custom conditions (thanks to [retorquere](https://github.com/retorquere));|
 |0.3.0|2015-05-27|Added `contentType` to options and optional `customConditions` to define a custom aws-s3 policy |
 |0.2.0|2015-04-07|Added option `successActionStatus` to make ajax form posts possible|
@@ -208,8 +209,12 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 
 |Name|Description|
 |:--|:--|
+|[**mime-nofs**](https://github.com/mpneuried/mime-nofs)|Comprehensive MIME type mapping API based on mime-db module. Without the filesystem dependency|
 |[**node-cache**](https://github.com/tcs-de/nodecache)|Simple and fast NodeJS internal caching. Node internal in memory cache like memcached.|
 |[**rsmq**](https://github.com/smrchy/rsmq)|A really simple message queue based on Redis|
+|[**rsmq-cli**](https://github.com/mpneuried/rsmq-cli)|a terminal client for rsmq|
+|[**rest-rsmq**](https://github.com/smrchy/rest-rsmq)|REST interface for.|
+|[**redis-notifications**](https://github.com/mpneuried/redis-notifications)|A redis based notification engine. It implements the rsmq-worker to safely create notifications and recurring reports.|
 |[**redis-sessions**](https://github.com/smrchy/redis-sessions)|An advanced session store for NodeJS and Redis|
 |[**connect-redis-sessions**](https://github.com/mpneuried/connect-redis-sessions)|A connect or express middleware to simply use the [redis sessions](https://github.com/smrchy/redis-sessions). With [redis sessions](https://github.com/smrchy/redis-sessions) you can handle multiple sessions per user_id.|
 |[**redis-heartbeat**](https://github.com/mpneuried/redis-heartbeat)|Pulse a heartbeat to redis. This can be used to detach or attach servers to nginx or similar problems.|
@@ -218,6 +223,8 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 |[**soyer**](https://github.com/mpneuried/soyer)|Soyer is small lib for serverside use of Google Closure Templates with node.js.|
 |[**grunt-soy-compile**](https://github.com/mpneuried/grunt-soy-compile)|Compile Goggle Closure Templates ( SOY ) templates inclding the handling of XLIFF language files.|
 |[**backlunr**](https://github.com/mpneuried/backlunr)|A solution to bring Backbone Collections together with the browser fulltext search engine Lunr.js|
+|[**domel**](https://github.com/mpneuried/domel)|A simple dom helper if you want to get rid of jQuery|
+|[**obj-schema**](https://github.com/mpneuried/obj-schema)|Simple module to validate an object by a predefined schema|
 
 
 ## The MIT License (MIT)

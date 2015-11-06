@@ -5,7 +5,7 @@ url = require( "url" )
 
 should = require('should')
 request = require( "request" )
-mime = require('mime')
+mime = require('mime-nofs')
 xmlParse = require('xml2js').parseString
 
 Module = require( "../." )

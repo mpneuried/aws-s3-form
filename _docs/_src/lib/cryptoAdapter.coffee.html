@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>cryptoAdapter.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "_src/lib/cryptoAdapter.coffee", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#awss3form">AwsS3Form</a>
+      </div>
+      <div class="heading h3">
+        <a href="#exports%3A%20instance">Exports: Instance</a>
+      </div>
+      <div class="heading h2">
+        <a href="#setmodule">setModule</a>
+      </div>
+      <div class="heading h2">
+        <a href="#hmacsha256">hmacSha256</a>
+      </div>
+      <div class="heading h2">
+        <a href="#_hmacsha256_crypto">_hmacSha256_Crypto</a>
+      </div>
+      <div class="heading h2">
+        <a href="#_hmacsha256_cryptojs">_hmacSha256_CryptoJs</a>
+      </div>
+      <div class="heading h2">
+        <a href="#_cryptojsenc">_cryptoJsEnc</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="awss3form">
+  <h1>
+    <a href="#awss3form" name="awss3form" class="pilcrow">&#182;</a>
+    AwsS3Form
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-2" id="line-2">2</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="exports%3A%20instance">
+  <h3>
+    <a href="#exports%3A%20instance" name="exports%3A%20instance" class="pilcrow">&#182;</a>
+    Exports: <em>Instance</em>
+  </h3>
+</div>
+
+
+<p>This is a adapter to centralize the usage of different crypto modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-8" id="line-8">8</a>  
+<a class="line-num" href="#line-9" id="line-9">9</a>  
+<a class="line-num" href="#line-10" id="line-10">10</a>  <span class="k">class</span> <span class="nx">CryptoAdapter</span>
+<a class="line-num" href="#line-11" id="line-11">11</a>    
+<a class="line-num" href="#line-12" id="line-12">12</a>  
+<a class="line-num" href="#line-13" id="line-13">13</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="setmodule">
+  <h2>
+    <a href="#setmodule" name="setmodule" class="pilcrow">&#182;</a>
+    setModule
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>CryptoAdapter.setModule( tmpl, data )</code></p>
+
+<p>The the crypto module and set the method <code>hmacSha256</code></p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[cryptoModule=`crypto`]</span>
+      <span class="dox_type">String</span>
+      <span>The module name of the used crypto module. Possible modules are the node internal "crypto" or the browser compatible <a href="https://www.npmjs.com/package/crypto-js">"crypto"</a> module</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">CryptoAdapter</span>
+      <span>A self reference</span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-24" id="line-24">24</a>  
+<a class="line-num" href="#line-25" id="line-25">25</a>    <span class="nv">setModule: </span><span class="nf">( cryptoModule = &quot;crypto&quot; )-&gt;</span>
+<a class="line-num" href="#line-26" id="line-26">26</a>      <span class="vi">@crypto = </span><span class="nx">require</span><span class="p">(</span> <span class="nx">cryptoModule</span> <span class="p">)</span>
+<a class="line-num" href="#line-27" id="line-27">27</a>      <span class="k">switch</span> <span class="nx">cryptoModule</span>
+<a class="line-num" href="#line-28" id="line-28">28</a>        <span class="k">when</span> <span class="s">&quot;crypto-js&quot;</span>
+<a class="line-num" href="#line-29" id="line-29">29</a>          <span class="vi">@hmacSha256 = </span><span class="nx">@_hmacSha256_CryptoJs</span>
+<a class="line-num" href="#line-30" id="line-30">30</a>        <span class="k">else</span>
+<a class="line-num" href="#line-31" id="line-31">31</a>          <span class="vi">@hmacSha256 = </span><span class="nx">@_hmacSha256_Crypto</span>
+<a class="line-num" href="#line-32" id="line-32">32</a>      <span class="k">return</span> <span class="nx">@</span>
+<a class="line-num" href="#line-33" id="line-33">33</a>    
+<a class="line-num" href="#line-34" id="line-34">34</a>  
+<a class="line-num" href="#line-35" id="line-35">35</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="hmacsha256">
+  <h2>
+    <a href="#hmacsha256" name="hmacsha256" class="pilcrow">&#182;</a>
+    hmacSha256
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>CryptoAdapter.hmacSha256( secret, val[, secinp, out] )</code></p>
+
+<p>calculate a hmac shah 256 hash</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">secret</span>
+      <span class="dox_type">String</span>
+      <span>The secret to generate the hash</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">val</span>
+      <span class="dox_type">String</span>
+      <span>The value to generate the hash of</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[secinp="hex"]</span>
+      <span class="dox_type">String</span>
+      <span>The input encoding of the secret. ( Enum: <code>hex</code>, <code>base64</code>, <code>utf8</code> )</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[out="hex"]</span>
+      <span class="dox_type">String</span>
+      <span>The output encoding of the generated hash. ( Enum: <code>hex</code>, <code>base64</code>, <code>utf8</code> )</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">String</span>
+      <span>The generated hash</span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </div>
+  </div>
+</div>
+
+<p>This is a virtual method that is generated by <code>setModule</code> based on the defined crypto module</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-50" id="line-50">50</a>  
+<a class="line-num" href="#line-51" id="line-51">51</a>    
+<a class="line-num" href="#line-52" id="line-52">52</a>  
+<a class="line-num" href="#line-53" id="line-53">53</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="_hmacsha256_crypto">
+  <h2>
+    <a href="#_hmacsha256_crypto" name="_hmacsha256_crypto" class="pilcrow">&#182;</a>
+    _hmacSha256_Crypto
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>CryptoAdapter._hmacSha256_Crypto( secret, val[, secinp, out] )</code></p>
+
+<p>The node internal version of <code>hmacSha256</code> using the <code>crypto</code> module</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">secret</span>
+      <span class="dox_type">String</span>
+      <span>The secret to generate the hash</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">val</span>
+      <span class="dox_type">String</span>
+      <span>The value to generate the hash of</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[secinp="hex"]</span>
+      <span class="dox_type">String</span>
+      <span>The input encoding of the secret. ( Enum: <code>hex</code>, <code>base64</code>, <code>utf8</code> )</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[out="hex"]</span>
+      <span class="dox_type">String</span>
+      <span>The output encoding of the generated hash. ( Enum: <code>hex</code>, <code>base64</code>, <code>utf8</code> )</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">String</span>
+      <span>The generated hash</span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-67" id="line-67">67</a>  
+<a class="line-num" href="#line-68" id="line-68">68</a>    <span class="nv">_hmacSha256_Crypto: </span><span class="nf">( secret, val, secinp=&quot;hex&quot;, out=&quot;hex&quot; )=&gt;</span>
+<a class="line-num" href="#line-69" id="line-69">69</a>      <span class="nv">_hash = </span><span class="nx">@crypto</span><span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="s">&#39;SHA256&#39;</span><span class="p">,</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">(</span> <span class="nx">secret</span><span class="p">,</span> <span class="nx">secinp</span> <span class="p">)</span> <span class="p">).</span><span class="nx">update</span><span class="p">(</span> <span class="nx">val</span> <span class="p">)</span>
+<a class="line-num" href="#line-70" id="line-70">70</a>      <span class="k">return</span> <span class="nx">_hash</span><span class="p">.</span><span class="nx">digest</span><span class="p">(</span> <span class="nx">out</span> <span class="p">)</span>
+<a class="line-num" href="#line-71" id="line-71">71</a>    
+<a class="line-num" href="#line-72" id="line-72">72</a>  
+<a class="line-num" href="#line-73" id="line-73">73</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="_hmacsha256_cryptojs">
+  <h2>
+    <a href="#_hmacsha256_cryptojs" name="_hmacsha256_cryptojs" class="pilcrow">&#182;</a>
+    _hmacSha256_CryptoJs
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>CryptoAdapter._hmacSha256_CryptoJs( secret, val[, secinp, out] )</code></p>
+
+<p>The browser version of <code>hmacSha256</code> using the <code>crypto-js</code> module</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">secret</span>
+      <span class="dox_type">String</span>
+      <span>The secret to generate the hash</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">val</span>
+      <span class="dox_type">String</span>
+      <span>The value to generate the hash of</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[secinp="hex"]</span>
+      <span class="dox_type">String</span>
+      <span>The input encoding of the secret. ( Enum: <code>hex</code>, <code>base64</code>, <code>utf8</code> )</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[out="hex"]</span>
+      <span class="dox_type">String</span>
+      <span>The output encoding of the generated hash. ( Enum: <code>hex</code>, <code>base64</code>, <code>utf8</code> )</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">String</span>
+      <span>The generated hash</span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-87" id="line-87">87</a>  
+<a class="line-num" href="#line-88" id="line-88">88</a>    <span class="nv">_hmacSha256_CryptoJs: </span><span class="nf">( secret, val, secinp=&quot;hex&quot;, out=&quot;hex&quot; )=&gt;</span>
+<a class="line-num" href="#line-89" id="line-89">89</a>      <span class="nv">_secinpEnc = </span><span class="nx">@_cryptoJsEnc</span><span class="p">(</span> <span class="nx">secinp</span> <span class="p">)</span>
+<a class="line-num" href="#line-90" id="line-90">90</a>      <span class="nv">_outEnc = </span><span class="nx">@_cryptoJsEnc</span><span class="p">(</span> <span class="nx">out</span> <span class="p">)</span>
+<a class="line-num" href="#line-91" id="line-91">91</a>      <span class="nv">_hash = </span><span class="nx">@crypto</span><span class="p">.</span><span class="nx">HmacSHA256</span><span class="p">(</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">_secinpEnc</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span> <span class="nx">secret</span> <span class="p">)</span> <span class="p">)</span>
+<a class="line-num" href="#line-92" id="line-92">92</a>      <span class="k">return</span> <span class="nx">_hash</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="nx">_outEnc</span> <span class="p">)</span>
+<a class="line-num" href="#line-93" id="line-93">93</a>    
+<a class="line-num" href="#line-94" id="line-94">94</a>  
+<a class="line-num" href="#line-95" id="line-95">95</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><div class="dox">
+  <div class="summary">
+<div class="pilwrap" id="_cryptojsenc">
+  <h2>
+    <a href="#_cryptojsenc" name="_cryptojsenc" class="pilcrow">&#182;</a>
+    _cryptoJsEnc
+  </h2>
+</div>
+
+  </div>
+  <div class="body"><p><code>CryptoAdapter._cryptoJsEnc( enc )</code></p>
+
+<p><code>crypto-js</code> helper to grab the right encoder</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">[enc="hex"]</span>
+      <span class="dox_type">String</span>
+      <span>The encoding key. ( Enum: <code>hex</code>, <code>base64</code>, <code>utf8</code> )</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span class="dox_type">CryptoJs.Enc</span>
+      <span>A crypto-js encoder</span>
+    </div>
+    <div class="dox_tag_title">API</div>
+    <div class="dox_tag_detail">
+      <span class="dox_type">private
+</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-106" id="line-106">106</a>  
+<a class="line-num" href="#line-107" id="line-107">107</a>    <span class="nv">_cryptoJsEnc: </span><span class="nf">( enc=&quot;hex&quot; )=&gt;</span>
+<a class="line-num" href="#line-108" id="line-108">108</a>      <span class="k">return</span> <span class="k">switch</span> <span class="nx">enc</span>
+<a class="line-num" href="#line-109" id="line-109">109</a>        <span class="k">when</span> <span class="s">&quot;base64&quot;</span> <span class="k">then</span> <span class="nx">@crypto</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Base64</span>
+<a class="line-num" href="#line-110" id="line-110">110</a>        <span class="k">when</span> <span class="s">&quot;hex&quot;</span> <span class="k">then</span> <span class="nx">@crypto</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span>
+<a class="line-num" href="#line-111" id="line-111">111</a>        <span class="k">when</span> <span class="s">&quot;utf8&quot;</span> <span class="k">then</span> <span class="nx">@crypto</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Utf8</span>
+<a class="line-num" href="#line-112" id="line-112">112</a>  
+<a class="line-num" href="#line-113" id="line-113">113</a>  
+<a class="line-num" href="#line-114" id="line-114">114</a>  </pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>export a instance</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><a class="line-num" href="#line-113" id="line-113">113</a>  
+<a class="line-num" href="#line-114" id="line-114">114</a>  <span class="nv">module.exports = </span><span class="k">new</span> <span class="nx">CryptoAdapter</span><span class="p">()</span>
+<a class="line-num" href="#line-115" id="line-115">115</a>    
+<a class="line-num" href="#line-116" id="line-116">116</a>  </pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

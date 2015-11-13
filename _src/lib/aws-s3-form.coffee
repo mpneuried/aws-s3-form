@@ -8,9 +8,6 @@
 # Generate a signed and reday to use formdata to put files to s3 directly from teh browser. Signing is done by using AWS Signature Version 4.
 # 
 
-# **node modules**
-crypto = require( "crypto" )
-
 # **npm modules**
 _ = require('lodash')
 uuid = require('node-uuid')
@@ -19,10 +16,13 @@ mime = require('mime-nofs')
 # **internal modules**
 # [Utils](./utils.coffee.html)
 utils = require( "./utils" )
+# [CryptoAdapter](./cryptoAdapter.coffee.html)
+cryptoAdapter = require( "./cryptoAdapter" )
 
 class AwsS3Form extends require( "mpbasic" )()
 
 	validation:
+		cryptoModules: [ "crypto", "crypto-js" ]
 		acl: [ "private", "public-read", "public-read-write", "authenticated-read", "bucket-owner-read", "bucket-owner-full-control" ]
 		successActionStatus: [200, 201, 204]
 
@@ -51,7 +51,23 @@ class AwsS3Form extends require( "mpbasic" )()
 			acl: "public-read"
 			# **AwsS3Form.useUuid** *Boolean* Use a uuid for better security
 			useUuid: true
+			# **AwsS3Form.cryptoModule** *String( enum: crypto|crypto-js)* You can switch between the node internal crypo-module or the browser module [cryptojs](https://www.npmjs.com/package/crypto-js)
+			cryptoModule: "crypto"
+		
+	###
+	## initialize
+	
+	`basic.initialize()`
+	
+	initialize the module and set the crypto adapter
 
+	@api private
+	###
+	initialize: ->
+		@_setCryptoModule( @config.cryptoModule )
+		return
+
+		
 	###
 	## create
 	
@@ -196,7 +212,7 @@ class AwsS3Form extends require( "mpbasic" )()
 	@param { String } policyB64 Base64 encoded policy
 	@param { Object } [options] sign options
 	@param { String } [options.now=`new Date()`] The current date-time for this signature
-	@param { String } [options.signdate=converted options.now`] signature date
+	@param { String } [options.signdate=converted `options.now`] signature date
 	@param { String } [options.secretAccessKey] Change the configured standard `secretAccessKey` type. 
 	@param { String } [options.region] Option to overwrite the general `region`
 	
@@ -206,12 +222,12 @@ class AwsS3Form extends require( "mpbasic" )()
 		_date = options.now or new Date()
 		_signdate = options.signdate or @_shortDate( _date, true )
 
-		_h1 = @_hmac( "AWS4" + ( options.secretAccessKey or @config.secretAccessKey ), _signdate )
-		_h2 = @_hmac( _h1, ( options.region or @config.region ) )
-		_h3 = @_hmac( _h2, "s3" )
-		_key = @_hmac( _h3, "aws4_request" )
+		_h1 = cryptoAdapter.hmacSha256( "AWS4" + ( options.secretAccessKey or @config.secretAccessKey ), _signdate, "utf8" )
+		_h2 = cryptoAdapter.hmacSha256( _h1, ( options.region or @config.region ) )
+		_h3 = cryptoAdapter.hmacSha256( _h2, "s3" )
+		_key = cryptoAdapter.hmacSha256( _h3, "aws4_request" )
 
-		return @_hmac( _key, policyB64 ).toString( "hex" )
+		return cryptoAdapter.hmacSha256( _key, policyB64 )
 
 	###
 	## _acl
@@ -349,22 +365,23 @@ class AwsS3Form extends require( "mpbasic" )()
 		return _sfull
 
 	###
-	## _hmac
+	## _setCryptoModule
 	
-	`AwsS3Form._hmac( secret, val )`
+	`AwsS3Form._setCryptoModule( cryptoModule )`
 	
-	Create a SHA256 hash
+	Define the crypto module type
 	
-	@param { String } secret The secret to hash 
-	@param { String } val The value to hash 
-	
-	@return { String } A SHA256 hash 
+	@param { String } cryptoModule The secret module to require. ( Enum: `crypto`, `crypto-js` ) 
 	
 	@api private
 	###
-	_hmac: ( secret, val )->
-		_hash = crypto.createHmac('SHA256', secret ).update( val )
-		return new Buffer( _hash.digest( "base64" ), "base64" )
+	_setCryptoModule: ( cryptoModule = @config.cryptoModule )=>
+		if cryptoModule not in @validation.cryptoModules
+			@_handleError( null, "EINVALIDCRYPTOMODULE", val: cryptoModule )
+			return
+						
+		cryptoAdapter.setModule( cryptoModule )
+		return
 
 	###
 	## _obj2b64
@@ -383,6 +400,7 @@ class AwsS3Form extends require( "mpbasic" )()
 		return new Buffer( JSON.stringify( obj ) ).toString('base64')
 
 	ERRORS: =>
+		"EINVALIDCRYPTOMODULE": [ 500, "The given cryptoModule `<%= val %>` is not valid. Only `#{@validation.cryptoModules.join('`, `')}` is allowed." ]
 		"ENOTDATE": [ 500, "Invalid date `<%= val %>`. Please use a valid date object or number as timestamp" ]
 		"EOLDDATE": [ 500, "Date `<%= val %>` to old. Only dates in the future are allowed" ]
 		"EINVALIDACL": [ 500, "The given acl `<%= val %>` is not valid. Only `#{@validation.acl.join('`, `')}` is allowed." ]

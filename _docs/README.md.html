@@ -174,6 +174,8 @@
 <li><strong>keyPrefix</strong> <em>( <code>String</code> optional: default = `` )</em> Key prefix to define a policy that the key has to start with this value</li>
 <li><strong>acl</strong> <em>( <code>String</code> optional: default = <code>public-read</code> )</em> The standard acl type. Only <code>private</code>, <code>public-read</code>, <code>public-read-write</code>, <code>authenticated-read</code>, <code>bucket-owner-read</code> and <code>bucket-owner-full-control</code> are allowed</li>
 <li><strong>useUuid</strong> <em>( <code>Boolean</code> optional: default = <code>true</code> )</em> Use a uuid for better security</li>
+<li><strong>cryptoModule</strong> <em>( <code>String</code> optional: default = <code>crypto</code>; enum: <code>crypto</code>,<code>crypto-js</code> )</em> You can switch between the node internal crypo-module or the browser module <a href="https://www.npmjs.com/package/crypto-js">cryptojs</a>. <br />
+<strong>INFO:</strong> If you want to use <code>crypto-js</code> you have to add/install it separately with <code>npm install crypto-js</code>.</li>
 </ul>
 
 
@@ -400,6 +402,7 @@ Then you are able to run <code>grunt test</code> or start the express example in
 
 <p>|Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.3|2015-11-13|Added a option <code>cryptoModule</code> to select <code>crypto</code> or <code>crypto-js</code> as internal crypto module. (thanks to <a href="https://github.com/retorquere">retorquere</a> and <a href="https://github.com/license2e">Ilya Shindyapin</a>)|
 |0.3.2|2015-11-06|Moved from <code>mime</code> to <code>mime-nofs</code> to use this module inside external modules like react-native or within the browser (thanks to <a href="https://github.com/retorquere">retorquere</a>)|
 |0.3.1|2015-08-26|Added all possible acl options and fixed numeric custom conditions (thanks to <a href="https://github.com/retorquere">retorquere</a>);|
 |0.3.0|2015-05-27|Added <code>contentType</code> to options and optional <code>customConditions</code> to define a custom aws-s3 policy |
@@ -422,6 +425,7 @@ Then you are able to run <code>grunt test</code> or start the express example in
 
 <p>|Name|Description|
 |:--|:--|
+|<a href="https://github.com/mpneuried/mime-nofs"><strong>mime-nofs</strong></a>|Comprehensive MIME type mapping API based on mime-db module. Without the filesystem dependency|
 |<a href="https://github.com/tcs-de/nodecache"><strong>node-cache</strong></a>|Simple and fast NodeJS internal caching. Node internal in memory cache like memcached.|
 |<a href="https://github.com/smrchy/rsmq"><strong>rsmq</strong></a>|A really simple message queue based on Redis|
 |<a href="https://github.com/mpneuried/rsmq-cli"><strong>rsmq-cli</strong></a>|a terminal client for rsmq|

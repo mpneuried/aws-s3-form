@@ -67,6 +67,8 @@ formdata = formGen.create( "my-s3-filename-or-key" )
 - **keyPrefix** *( `String` optional: default = `` )* Key prefix to define a policy that the key has to start with this value
 - **acl** *( `String` optional: default = `public-read` )* The standard acl type. Only `private`, `public-read`, `public-read-write`, `authenticated-read`, `bucket-owner-read` and `bucket-owner-full-control` are allowed
 - **useUuid** *( `Boolean` optional: default = `true` )* Use a uuid for better security
+- **cryptoModule** *( `String` optional: default = `crypto`; enum: `crypto`,`crypto-js` )* You can switch between the node internal crypo-module or the browser module [cryptojs](https://www.npmjs.com/package/crypto-js).  
+  **INFO:** If you want to use `crypto-js` you have to add/install it separately with `npm install crypto-js`.
 
 ### Security Warning!
 
@@ -194,6 +196,7 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.3|2015-11-13|Added a option `cryptoModule` to select `crypto` or `crypto-js` as internal crypto module. (thanks to [retorquere](https://github.com/retorquere) and [Ilya Shindyapin](https://github.com/license2e))|
 |0.3.2|2015-11-06|Moved from `mime` to `mime-nofs` to use this module inside external modules like react-native or within the browser (thanks to [retorquere](https://github.com/retorquere))|
 |0.3.1|2015-08-26|Added all possible acl options and fixed numeric custom conditions (thanks to [retorquere](https://github.com/retorquere));|
 |0.3.0|2015-05-27|Added `contentType` to options and optional `customConditions` to define a custom aws-s3 policy |

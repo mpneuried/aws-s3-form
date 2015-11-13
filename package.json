@@ -1,6 +1,6 @@
 {
   "name": "aws-s3-form",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Generate a signed and reday to use formdata to put files to s3 directly from teh browser. Signing is done by using AWS Signature Version 4 ",
   "keywords": [
     "aws",

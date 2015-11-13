@@ -193,6 +193,11 @@ grunt build
 Then configure the tests by copy the file `_skeleton_config_test.json` to `config_test.json` and fill in the correct data.
 Then you are able to run `grunt test` or start the express example in `test/server.js`.
 
+## Code docs
+
+The code docs can be found here:
+https://rawgit.com/mpneuried/aws-s3-form/master/_docs/_src/lib/aws-s3-form.coffee.html
+
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|

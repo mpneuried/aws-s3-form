@@ -54,6 +54,12 @@ module.exports = (grunt) ->
 				options:
 					env:
 						severity_awss3form: "info"
+			
+			travis:
+				src: [ "test/travis.js" ]
+				options:
+					env:
+						severity_awss3form: "info"
 		
 		
 		docker:
@@ -90,6 +96,7 @@ module.exports = (grunt) ->
 	grunt.registerTask "docs", "docker"
 	grunt.registerTask "clear", [ "clean:base" ]
 	grunt.registerTask "test", [ "mochacli:main" ]
+	grunt.registerTask "test-travis", [ "mochacli:travis" ]
 
 	# build the project
 	grunt.registerTask "build", [ "clear", "coffee:base", "includereplace" ]

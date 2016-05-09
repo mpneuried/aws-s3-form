@@ -9,9 +9,16 @@
 # 
 
 # **npm modules**
-_ = require('lodash')
 uuid = require('node-uuid')
 mime = require('mime-nofs')
+_isString = require( "lodash/isString" )
+_isArray = require( "lodash/isArray" )
+_isObject = require( "lodash/isObject" )
+_template = require( "lodash/template" )
+_isFunction = require( "lodash/isFunction" )
+_isNumber = require( "lodash/isNumber" )
+_isDate = require( "lodash/isDate" )
+
 
 # **internal modules**
 # [Utils](./utils.coffee.html)
@@ -94,7 +101,7 @@ class AwsS3Form extends require( "mpbasic" )()
 		if @config.useUuid
 			options.uuid = uuid.v4()
 		
-		if  options.contentType? and _.isString( options.contentType )
+		if  options.contentType? and _isString( options.contentType )
 			_cType = options.contentType
 		else if options.contentType
 			_cType = mime.lookup( filename )
@@ -108,7 +115,7 @@ class AwsS3Form extends require( "mpbasic" )()
 		if options.redirectUrlTemplate?
 			_data.success_action_redirect = @_redirectUrl( options.redirectUrlTemplate, filename: filename )
 		else
-			if _.isString( options.successActionStatus )
+			if _isString( options.successActionStatus )
 				options.successActionStatus = parseInt( options.successActionStatus, 10 )
 			_data.success_action_status = @_successActionStatus( options.successActionStatus )
 
@@ -190,7 +197,7 @@ class AwsS3Form extends require( "mpbasic" )()
 		if options.customConditions?
 			for ccond in options.customConditions
 				policy.conditions.push ccond
-				if ( _.isArray( ccond ) and _.isString( ccond[ 1 ] ) and ccond[ 1 ].toLowerCase() is "$content-type" ) or ( _.isObject( ccond ) and ccond["content-type"]? )
+				if ( _isArray( ccond ) and _isString( ccond[ 1 ] ) and ccond[ 1 ].toLowerCase() is "$content-type" ) or ( _isObject( ccond ) and ccond["content-type"]? )
 					_ctypeCondition = true
 		
 		if not _ctypeCondition and _predef?.contentType?
@@ -265,9 +272,9 @@ class AwsS3Form extends require( "mpbasic" )()
 		if not tmpl?
 			return @_handleError( null, "ENOREDIR" )
 		
-		if _.isString( tmpl )
-			return _.template( tmpl )( data )
-		else if _.isFunction( tmpl )
+		if _isString( tmpl )
+			return _template( tmpl )( data )
+		else if _isFunction( tmpl )
 			return tmpl( data )
 		else
 			return @_handleError( null, "EINVALIDREDIR" )
@@ -308,15 +315,15 @@ class AwsS3Form extends require( "mpbasic" )()
 		_msAdd = 0
 		_now = Date.now()
 		
-		if _.isNumber( addSec )
+		if _isNumber( addSec )
 			_msAdd = addSec * 1000
-			if _.isDate( date )
+			if _isDate( date )
 				_ts = date.valueOf()
-			else if _.isNumber( date )
+			else if _isNumber( date )
 				_ts = date
 			else
 				return @_handleError( null, "ENOTDATE", val: date )
-		else if _.isDate( addSec )
+		else if _isDate( addSec )
 			_ts = addSec.valueOf()
 		else
 			return @_handleError( null, "ENOTDATE", val: addSec )

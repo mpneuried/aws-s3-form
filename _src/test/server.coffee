@@ -1,8 +1,9 @@
 path = require( "path" )
 _config = require( "../config_test.json" )
+_defaults = require( "lodash/defaults" )
+_pick = require( "lodash/pick" )
 
-_ = require( "lodash" )
-CONFIG = _.defaults _config.example or {},
+CONFIG = _defaults _config.example or {},
 	port: 3010
 
 express = require('express')
@@ -31,7 +32,7 @@ app.get '/', (req, res)->
 	console.log _config.s3.keyPrefix, _key
 	if not _key?
 		_key = utils.randomString( 10 )
-	_opts = _.pick( req.query, [ "acl" ] )
+	_opts = _pick( req.query, [ "acl" ] )
 	if _statuscode
 		_opts.successActionStatus = _statuscode
 	else

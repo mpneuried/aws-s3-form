@@ -193,6 +193,45 @@ grunt build
 Then configure the tests by copy the file `_skeleton_config_test.json` to `config_test.json` and fill in the correct data.
 Then you are able to run `grunt test` or start the express example in `test/server.js`.
 
+## Play with it ...
+
+To get your hands on the module you can start the testing server and try out some configurations.
+
+This will look like:
+![Example view](https://raw.githubusercontent.com/mpneuried/aws-s3-form/master/_docs/testpage.png)
+
+**Install:**
+
+```
+$ git clone https://github.com/mpneuried/aws-s3-form.git
+$ cd aws-s3-form
+$ npm install
+$ grunt build
+```
+
+**Configure:**
+
+Create a file called `config_test.json` with the following content and set your AWS crendentials:
+
+```
+{
+	"s3": {
+		"accessKeyId": " - Please define your test key - ",
+		"secretAccessKey": " - Please define your test secret - ",
+		"region": "eu-central-1",
+		"bucket": " - Please define your test bucket - "
+	}
+}
+```
+
+**Start:**
+
+```
+$ node test/server.js
+```
+
+Open `http://localhost:3010/` in your browser.
+
 ## Code docs
 
 The code docs can be found **[here](https://rawgit.com/mpneuried/aws-s3-form/master/_docs/_src/lib/aws-s3-form.coffee.html)**.
@@ -201,6 +240,7 @@ The code docs can be found **[here](https://rawgit.com/mpneuried/aws-s3-form/mas
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.4|2016-05-09|Updated dependencies, especially lodash to 4.x.; Optimized readme.|
 |0.3.3|2015-11-13|Added a option `cryptoModule` to select `crypto` or `crypto-js` as internal crypto module. (thanks to [retorquere](https://github.com/retorquere) and [Ilya Shindyapin](https://github.com/license2e))|
 |0.3.2|2015-11-06|Moved from `mime` to `mime-nofs` to use this module inside external modules like react-native or within the browser (thanks to [retorquere](https://github.com/retorquere))|
 |0.3.1|2015-08-26|Added all possible acl options and fixed numeric custom conditions (thanks to [retorquere](https://github.com/retorquere));|

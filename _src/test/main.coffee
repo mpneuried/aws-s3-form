@@ -47,7 +47,6 @@ describe "----- aws-s3-form TESTS -----", ->
 
 		_config.s3.keyPrefix = "test_"
 
-
 		_moduleInst = new Module( _config.s3 )
 		# TODO add initialisation Code
 		done()
@@ -491,6 +490,20 @@ describe "----- aws-s3-form TESTS -----", ->
 							  ['content-length-range', 0, 1048576],
 							]
 						_dataG = _moduleInst.create( _filenameF, _opt )
+						done()
+						return
+					
+					return
+				
+				describe 'Reduced call', ->
+					it "create the most basic call", ( done )->
+						_filenameG = utils.randomString( 10 ) + "." + mime.extension(testfileMime)
+						
+						_opt = {}
+						_dataG = _moduleInst.create( _filenameF, _opt )
+						
+						console.log _dataG
+						
 						done()
 						return
 					

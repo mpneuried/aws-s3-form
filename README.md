@@ -197,7 +197,7 @@ Then you are able to run `grunt test` or start the express example in `test/serv
 
 To get your hands on the module you can start the testing server and try out some configurations.
 
-This will look like:
+This will look like:  
 ![Example view](https://raw.githubusercontent.com/mpneuried/aws-s3-form/master/_docs/testpage.png)
 
 **Install:**

@@ -240,6 +240,7 @@ The code docs can be found **[here](https://rawgit.com/mpneuried/aws-s3-form/mas
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.3.5|2016-05-09|Hard set of dependency `node-uuid` to >= 1.4.4 because of [security issue](https://nodesecurity.io/advisories/uuid_insecure-entropy-source-mathrandom).|
 |0.3.4|2016-05-09|Updated dependencies, especially lodash to 4.x.; Optimized readme.|
 |0.3.3|2015-11-13|Added a option `cryptoModule` to select `crypto` or `crypto-js` as internal crypto module. (thanks to [retorquere](https://github.com/retorquere) and [Ilya Shindyapin](https://github.com/license2e))|
 |0.3.2|2015-11-06|Moved from `mime` to `mime-nofs` to use this module inside external modules like react-native or within the browser (thanks to [retorquere](https://github.com/retorquere))|

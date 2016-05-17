@@ -2,6 +2,7 @@ aws-s3-form
 ============
 
 [![Build Status](https://secure.travis-ci.org/mpneuried/aws-s3-form.png?branch=master)](http://travis-ci.org/mpneuried/aws-s3-form)
+[![Windows Tests](https://img.shields.io/appveyor/ci/mpneuried/aws-s3-form.svg?label=Windows%20Test)]()
 [![Dependencies](https://david-dm.org/mpneuried/aws-s3-form.png)](https://david-dm.org/mpneuried/aws-s3-form)
 [![NPM version](https://badge.fury.io/js/aws-s3-form.png)](http://badge.fury.io/js/aws-s3-form)
 
